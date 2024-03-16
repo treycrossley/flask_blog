@@ -1,5 +1,5 @@
 """For flask library and template rendering for our web app"""
-from flask import Flask, render_template, flash
+from flask import Flask, render_template, flash, request
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired, Email
@@ -12,6 +12,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
 app.config["SECRET_KEY"] = "1234"
 
 db = SQLAlchemy(app)
+
+
 class Users(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(200), nullable=False)
@@ -40,6 +42,23 @@ def index():
     """Directs to home page"""
     first_name = "Trey"
     return render_template("index.html", first_name=first_name)
+
+@app.route('/update/<int:id>', methods=['GET', 'POST'])
+def update(id):
+    form = UserForm()
+    name_to_update = Users.query.get_or_404(id)
+    if request.method == "POST":
+        name_to_update.name = request.form['name']
+        name_to_update.email = request.form['email']
+        try:
+            db.session.commit()
+            flash("User updated!!")
+            return render_template('update.html', form=form, name_to_update=name_to_update)
+        except:
+            flash("ERROR! TRY AGAIN!")
+            return render_template('update.html', form=form, name_to_update=name_to_update)
+    else:
+        return render_template('update.html', form=form, name_to_update=name_to_update)
 
 @app.route('/name', methods=['GET', 'POST'])
 def name():
