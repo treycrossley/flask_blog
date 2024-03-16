@@ -4,6 +4,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired, Email
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 from datetime import datetime, timezone
 
 # Create Flask instance
@@ -12,12 +13,14 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
 app.config["SECRET_KEY"] = "1234"
 
 db = SQLAlchemy(app)
+migrate = Migrate(app,db)
 
 
 class Users(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(200), nullable=False)
     email = db.Column(db.String(200), nullable=False, unique=True)
+    favorite_pizza_place = db.Column(db.String(200), default="You")
     date_added = db.Column(db.DateTime, default=datetime.now(timezone.utc))
 
     def __repr__(self):
@@ -33,6 +36,7 @@ class NamerForm(FlaskForm):
 class UserForm(FlaskForm):
     name = StringField("Name", validators=[DataRequired()])
     email = StringField("email", validators=[DataRequired(), Email()])
+    favorite_pizza_place = StringField("Favorite Pizza Place")
     submit = SubmitField("Submit")
 
 
@@ -50,11 +54,12 @@ def update(id):
     if request.method == "POST":
         name_to_update.name = request.form['name']
         name_to_update.email = request.form['email']
+        name_to_update.favorite_pizza_place = request.form['favorite_pizza_place']
         try:
             db.session.commit()
             flash("User updated!!")
             return render_template('update.html', form=form, name_to_update=name_to_update)
-        except:
+        except Exception:
             flash("ERROR! TRY AGAIN!")
             return render_template('update.html', form=form, name_to_update=name_to_update)
     else:
@@ -83,12 +88,13 @@ def add_user():
     if form.validate_on_submit():
         user = Users.query.filter_by(email=form.email.data).first()
         if user is None:
-            user = Users(name=form.name.data, email=form.email.data)
+            user = Users(name=form.name.data, email=form.email.data, favorite_pizza_place=form.favorite_pizza_place.data)
             db.session.add(user)
             db.session.commit()
         name = form.name.data
         form.name.data = ''
         form.email.data = ''
+        form.favorite_pizza_place.data=''
         flash("User added!!")
     our_users = Users.query.order_by(Users.date_added)
     return render_template('add_user.html', form=form, name=name, our_users=our_users)
