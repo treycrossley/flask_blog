@@ -6,12 +6,13 @@ from wtforms.validators import DataRequired, Email
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from datetime import datetime, timezone
+from flask_bcrypt import Bcrypt
 
 # Create Flask instance
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
 app.config["SECRET_KEY"] = "1234"
-
+bcrypt = Bcrypt(app)
 db = SQLAlchemy(app)
 migrate = Migrate(app,db)
 
@@ -22,6 +23,19 @@ class Users(db.Model):
     email = db.Column(db.String(200), nullable=False, unique=True)
     favorite_pizza_place = db.Column(db.String(200), default="You")
     date_added = db.Column(db.DateTime, default=datetime.now(timezone.utc))
+
+    password_hash = db.Column(db.String(128))
+    
+    @property
+    def password(self):
+        raise AttributeError("password is not a readable attribute")
+    
+    @password.setter
+    def password(self,password):
+        self.password_hash = bcrypt.generate_password_hash(password).decode('utf-8')
+
+    def verify_password(self, password):
+        return bcrypt.check_password_hash(self.password_hash, password)
 
     def __repr__(self):
         return '<Name %r>' % self.name
