@@ -47,6 +47,12 @@ class NamerForm(FlaskForm):
     name = StringField("What's your name", validators=[DataRequired()])
     submit = SubmitField("Submit")
 
+class PasswordForm(FlaskForm):
+    """class for asking user their name"""
+    email = StringField("What's your email", validators=[DataRequired()])
+    pw = PasswordField("What's your password", validators=[DataRequired()])
+    submit = SubmitField("Submit")
+
 class UserForm(FlaskForm):
     name = StringField("Name", validators=[DataRequired()])
     email = StringField("email", validators=[DataRequired(), Email()])
@@ -107,6 +113,26 @@ def name():
         form.name.data = ''
         flash("Form succesfully submitted!!")
     return render_template("name.html", name = name, form = form)
+
+@app.route('/test_pw', methods=['GET', 'POST'])
+def test_pw():
+    """directs to user form"""
+    email = None
+    password = None
+    pw_to_check = None
+    passed = None
+    form = PasswordForm()
+    if form.validate_on_submit():
+        email = form.email.data 
+        password = form.pw.data
+        form.email.data = ''
+        form.pw.data = ''
+
+        pw_to_check = Users.query.filter_by(email=email).first()
+        passed = bcrypt.check_password_hash(pw_to_check.password_hash, password)
+
+    return render_template("test_pw.html", email=email, pw=password, form=form, pw_to_check=pw_to_check, passed=passed)
+
 
 @app.route('/user/<name>')
 def user(name):
