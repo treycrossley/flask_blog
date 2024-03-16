@@ -1,8 +1,8 @@
 """For flask library and template rendering for our web app"""
 from flask import Flask, render_template, flash, request
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField
-from wtforms.validators import DataRequired, Email
+from wtforms import StringField, SubmitField, PasswordField, BooleanField, ValidationError
+from wtforms.validators import DataRequired, Email, EqualTo, Length
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from datetime import datetime, timezone
@@ -51,6 +51,8 @@ class UserForm(FlaskForm):
     name = StringField("Name", validators=[DataRequired()])
     email = StringField("email", validators=[DataRequired(), Email()])
     favorite_pizza_place = StringField("Favorite Pizza Place")
+    password = PasswordField('Password', validators=[DataRequired(), EqualTo('password2', message='Passwords must match!')])
+    password2 = PasswordField('Confirm Password', validators=[DataRequired()])
     submit = SubmitField("Submit")
 
 
@@ -118,18 +120,18 @@ def add_user():
     if form.validate_on_submit():
         user = Users.query.filter_by(email=form.email.data).first()
         if user is None:
-            user = Users(name=form.name.data, email=form.email.data, favorite_pizza_place=form.favorite_pizza_place.data)
+            hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+            user = Users(name=form.name.data, email=form.email.data, favorite_pizza_place=form.favorite_pizza_place.data, password_hash = hashed_password)
             db.session.add(user)
             db.session.commit()
         name = form.name.data
         form.name.data = ''
         form.email.data = ''
         form.favorite_pizza_place.data=''
+        form.password.data = ''
         flash("User added!!")
     our_users = Users.query.order_by(Users.date_added)
     return render_template('add_user.html', form=form, name=name, our_users=our_users)
-
-
 
 
 # Invalid URL page
