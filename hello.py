@@ -5,7 +5,7 @@ from wtforms import StringField, SubmitField, PasswordField, BooleanField, Valid
 from wtforms.validators import DataRequired, Email, EqualTo, Length
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-from datetime import datetime, timezone
+from datetime import datetime, timezone, date
 from flask_bcrypt import Bcrypt
 
 # Create Flask instance
@@ -101,6 +101,15 @@ def delete(id):
     except BaseException:
         flash("OOPSIES. SOMETHING WENT WRONG")
         return render_template('add_user.html', form=form, name=name, our_users=our_users)
+
+
+@app.route('/date')
+def get_current_date():
+    fav_pizza_place = {
+        'trey': "Youre my favorite pizza place",
+        'john': "papa johns"
+    }
+    return fav_pizza_place
 
 
 @app.route('/name', methods=['GET', 'POST'])
