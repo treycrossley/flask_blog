@@ -1,8 +1,11 @@
-from flask import Blueprint, render_template, request, flash
+from flask import Blueprint, render_template, request, flash, current_app
 from flask_login import login_required
 from app.models import Users
 from app.forms import UserForm
 from app.extensions import db, bcrypt
+from werkzeug.utils import secure_filename
+import uuid as uuid
+import os
 
 users_bp = Blueprint("users", __name__, url_prefix='/users', template_folder="../../templates")
 
@@ -17,13 +20,38 @@ def update(id):
         name_to_update.email = request.form['email']
         name_to_update.favorite_pizza_place = request.form['favorite_pizza_place']
         name_to_update.username = request.form['username']
-        try:
-            db.session.commit()
-            flash("User updated!!")
-            return render_template('users/update.html', form=form, name_to_update=name_to_update)
-        except BaseException:
-            flash("ERROR! TRY AGAIN!")
-            return render_template('users/update.html', form=form, name_to_update=name_to_update)
+        name_to_update.profile_pic = request.files['profile_pic']
+        
+        if request.files['profile_pic']:
+            name_to_update.profile_pic = request.files['profile_pic']
+
+			# Grab Image Name
+            pic_filename = secure_filename(name_to_update.profile_pic.filename)
+			# Set UUID
+            pic_name = str(uuid.uuid1()) + "_" + pic_filename
+			# Save That Image
+            saver = request.files['profile_pic']
+			
+
+			# Change it to a string to save to db
+            name_to_update.profile_pic = pic_name
+
+            try:
+                db.session.commit()
+                saver.save(os.path.join(current_app.config['UPLOAD_FOLDER'], pic_name))
+                flash("User Updated Successfully!")
+                return render_template("dashboard.html")
+            except BaseException:
+                flash("ERROR! TRY AGAIN!")
+                return render_template('users/update.html', form=form, name_to_update=name_to_update)
+        else:
+            try:
+                db.session.commit()
+                flash("User updated!!")
+                return render_template('dashboard.html')
+            except BaseException:
+                flash("ERROR! TRY AGAIN!")
+                return render_template('users/update.html', form=form, name_to_update=name_to_update)
     else:
         return render_template('users/update.html', form=form, name_to_update=name_to_update,id=id)
 

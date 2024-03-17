@@ -2,6 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, PasswordField, BooleanField, ValidationError
 from wtforms.validators import DataRequired, Email, EqualTo, Length
 from flask_ckeditor import CKEditorField
+from flask_wtf.file import FileField
 
 class LoginForm(FlaskForm):
     username = StringField("Username", validators=[DataRequired()])
@@ -38,4 +39,5 @@ class UserForm(FlaskForm):
     favorite_pizza_place = StringField("Favorite Pizza Place")
     password = PasswordField('Password', validators=[DataRequired(), EqualTo('password2', message='Passwords must match!')])
     password2 = PasswordField('Confirm Password', validators=[DataRequired()])
+    profile_pic = FileField("Profile Pic")
     submit = SubmitField("Submit")

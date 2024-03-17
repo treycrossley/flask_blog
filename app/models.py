@@ -12,6 +12,8 @@ class Users(db.Model, UserMixin):
     email = db.Column(db.String(200), nullable=False, unique=True)
     favorite_pizza_place = db.Column(db.String(200), default="You")
     date_added = db.Column(db.DateTime, default=datetime.now(timezone.utc))
+    profile_pic = db.Column(db.String(), nullable=True)
+    is_admin = db.Column(db.Boolean, nullable=False, default=False)
 
     password_hash = db.Column(db.String(128))
     posts = db.relationship('Posts', backref='poster')
