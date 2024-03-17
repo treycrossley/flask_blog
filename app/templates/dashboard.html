@@ -24,17 +24,30 @@
     {{current_user.name}}
   </div>
   <div class="card-body">
-    <h5 class="card-title">Welcome to your dashboard!</h5>
     <p class="card-text">
-        <strong>Username: </strong> {{current_user.username}}</br>
-        <strong>User ID:</strong>  {{current_user.id}} </br>
-        <strong>email: </strong> {{current_user.email}}</br>
-        <strong>Favorite Pizza Place: </strong> {{current_user.favorite_pizza_place}}  </br>
-        <strong>Date Joined: </strong> {{current_user.date_added}}  </br>
-    </p>
-    <a class="btn btn-outline-danger" href="{{url_for('auth.logout')}}">Logout</a>
-    <a class="btn btn-outline-secondary" href="{{url_for('users.update', id=current_user.id)}}">Update Profile </a> 
-    <a class="btn btn-danger" href="{{url_for('users.delete',id=current_user.id)}}">Delete</a>
+      <div class="container">
+        <div class="row">
+          <div class="col-8">
+              <strong>Username: </strong> {{current_user.username}}</br>
+              <strong>User ID:</strong>  {{current_user.id}} </br>
+              <strong>email: </strong> {{current_user.email}}</br>
+              <strong>Favorite Pizza Place: </strong> {{current_user.favorite_pizza_place}}  </br>
+              <strong>Date Joined: </strong> {{current_user.date_added}}  </br>
+              </p>
+              <a class="btn btn-outline-danger" href="{{url_for('auth.logout')}}">Logout</a>
+              <a class="btn btn-outline-secondary" href="{{url_for('users.update', id=current_user.id)}}">Update Profile </a> 
+              <a class="btn btn-danger" href="{{url_for('users.delete',id=current_user.id)}}">Delete</a>
+              <br><br>
+            </div>
+          <div class="col-4">
+                <img align='right' width='150' src="{{url_for('static',filename='images/defaultProfilePic.jpeg')}}">
+          </div>
+        </div>
+        
+      </div>
+    
+
+
   </div>
 </div>
 
