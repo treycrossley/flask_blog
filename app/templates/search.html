@@ -2,11 +2,30 @@
 
 {% block content %}
 
-<h1>You searched for...</h1>
-<p>{{searched}}</p>
+<h1>You searched for: <em>{{searched}}</em></h1>
+
+{% if posts %}
 
  {% for post in posts %}
-   <a href="{{url_for('posts.post', id=post.id)}}"> {{post.title}} </a></br>
+     <div class="shadow p-3 mb-5 bg-body-tertiary rounded">
+        <h2>{{post.title}}</h2> 
+
+        Posted by: {{post.poster.name}} </br>
+        Posted on: {{post.date_posted}} </br> </br>
+
+        {{post.content|safe}} </br> </br>
+        <a class='btn btn-outline-secondary btn-small' href="{{url_for('posts.post', id=post.id)}}">View Post</a>
+        {% if post.poster_id == current_user.id %}
+        <a class='btn btn-outline-secondary btn-small' href="{{url_for('posts.edit_post', id=post.id)}}">Edit Post</a>
+        <a class='btn btn-outline-danger btn-small' href="{{url_for('posts.delete_post', id=post.id)}}">Delete Post</a>
+        {% endif %}
+
+    </div>
+
  {% endfor %}
+
+ {%else%}
+  Sorry your search term: <strong>{{searched}}</strong> was not found
+ {%endif%}
 
 {% endblock %}
