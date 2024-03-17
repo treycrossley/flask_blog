@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, redirect, request, flash
+from flask_login import login_required
 from app.models import Users
 from app.forms import UserForm
 from app.extensions import db, bcrypt
@@ -7,6 +8,7 @@ users_bp = Blueprint("users", __name__, url_prefix='/users', template_folder="..
 
 
 @users_bp.route('/update/<int:id>', methods=['GET', 'POST'])
+@login_required
 def update(id):
     form = UserForm()
     name_to_update = Users.query.get_or_404(id)
@@ -26,6 +28,7 @@ def update(id):
         return render_template('users/update.html', form=form, name_to_update=name_to_update,id=id)
 
 @users_bp.route('/delete/<int:id>')
+@login_required
 def delete(id):
     user_to_delete = Users.query.get_or_404(id)
     name = None

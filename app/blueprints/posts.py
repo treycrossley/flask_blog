@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, redirect, url_for, flash
+from flask_login import login_required
 from app.models import Posts
 from app.forms import PostForm
 from app.extensions import db
@@ -18,6 +19,7 @@ def post(id):
     return render_template('posts/post.html', post=post) 
 
 @posts_bp.route('/edit/<int:id>', methods=['GET','POST'])
+@login_required
 def edit_post(id):
     post = Posts.query.get_or_404(id)
     form = PostForm()
@@ -39,6 +41,7 @@ def edit_post(id):
     return render_template('posts/edit_post.html',form=form, post_id = id)
 
 @posts_bp.route('/delete/<int:id>')
+@login_required
 def delete_post(id):
     post_to_delete = Posts.query.get_or_404(id)
     try:
@@ -52,6 +55,7 @@ def delete_post(id):
     
 
 @posts_bp.route('/add', methods=['GET', 'POST'])
+@login_required
 def add_post():
     form = PostForm()
     if form.validate_on_submit():

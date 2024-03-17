@@ -12,24 +12,9 @@
 </div>
    
 {% endfor %}
+{% if id == current_user.id %}
 
-    {% if name %}
-    <h1>Update User!</h1>
-    </br>
-
-    <br>
-
-    <table class="table table-hover table-bordered table-striped">
-    {% for our_user in our_users %}
-    <br>
-    <tr>
-       <td> {{our_user.id}}. {{ our_user.name }} - {{our_user.email}}  - {{our_user.favorite_pizza_place}}</td>
-    </tr>
-    {%endfor%}
-</table>
-
-    {% else %} 
-    <h1> Update User...</h1>
+    <h1> Update User</h1>
     <br/>
     <div class="shadow p-3 mb-5 bg-body-tertiary rounded">
     <form action="{{url_for('users.update',id=name_to_update.id)}}" method="POST">
@@ -51,7 +36,14 @@
 
     </form>
     </div>
-{% endif %}
-
+    {% else %}
+     <div class="alert alert-success alert-dismissible fade show" role="alert">
+   Sorry you can't access this user's account
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<h2> Access Denied!</h2>
+    {% endif %}
 {% endblock %}
 
