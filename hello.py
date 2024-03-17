@@ -207,6 +207,7 @@ def logout():
 @app.route('/dashboard', methods=['GET', 'POST'])
 @login_required
 def dashboard():
+
     return render_template('dashboard.html')
 
 @app.route('/update/<int:id>', methods=['GET', 'POST'])
@@ -217,6 +218,7 @@ def update(id):
         name_to_update.name = request.form['name']
         name_to_update.email = request.form['email']
         name_to_update.favorite_pizza_place = request.form['favorite_pizza_place']
+        name_to_update.username = request.form['username']
         try:
             db.session.commit()
             flash("User updated!!")
