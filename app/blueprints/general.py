@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, redirect, request, flash, url_for
 from app.models import Users, Posts
 from app.forms import LoginForm, NamerForm, PasswordForm, SearchForm
 from app.extensions import db, bcrypt, login_manager
-from flask_login import login_required, login_user, logout_user
+from flask_login import login_required, login_user, logout_user, current_user
 
 general_bp = Blueprint("general", __name__, url_prefix='/', template_folder="../../templates")
 
@@ -17,6 +17,17 @@ def index():
     """Directs to home page"""
     first_name = "Trey"
     return render_template("index.html", first_name=first_name)
+
+@general_bp.route('/admin')
+@login_required
+def admin():
+    """Directs to admin page"""
+    id = current_user.id
+    if id == 3:
+        return render_template("admin.html")
+    else:
+        flash("You do not have admin privileges")
+        return redirect(url_for('general.dashboard'))
 
 @general_bp.app_context_processor
 def base():
