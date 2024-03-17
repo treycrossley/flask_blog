@@ -4,6 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
 from sqlalchemy import MetaData
+from flask_ckeditor import CKEditor
 
 convention = {
     "ix": 'ix_%(column_0_label)s',
@@ -19,3 +20,4 @@ db = SQLAlchemy(metadata=metadata)
 migrate = Migrate(render_as_batch=True)
 bcrypt = Bcrypt()
 login_manager = LoginManager()
+ckEditor = CKEditor()
