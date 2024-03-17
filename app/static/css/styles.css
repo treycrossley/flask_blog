@@ -33,3 +33,7 @@ body {
   gap: 10px;
 }
 
+.row {
+    padding: 4em;
+}
+
