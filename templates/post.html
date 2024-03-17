@@ -2,6 +2,16 @@
 
 {% block content %}
 
+{% for message in get_flashed_messages() %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+   Hey! {{message}}
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+   
+{% endfor %}
+
 <div class="shadow p-3 mb-5 bg-body-tertiary rounded">
         <h2>{{post.title}}</h2> 
 
@@ -10,7 +20,7 @@
 
         {{post.content}} </br> </br>
     </div>
-
+    <a class='btn btn-outline-secondary btn-small' href="{{url_for('edit_post', id=post.id)}}">Edit Posts</a>
     <a class='btn btn-outline-secondary btn-small' href="{{url_for('posts')}}">Back to all posts</a>
 
 {% endblock %}
