@@ -15,10 +15,21 @@
 
         {{form.content.label(class="form-label")}}
         {{form.content(class="form-control", rows="5")}}
+        
+           {%for fieldName, errorMessages in form.errors.items():%}
+          <p class="text-danger">There was an error with the {{fieldName}} field: 
+            {% for message in errorMessages%}
+            <br>
+            {{message}}
+           {% endfor %}
+           </p>
+        {%endfor%}
    
     </br>
     {{form.submit(class="btn btn-secondary")}}
     </form>
+    
+
     {{ ckeditor.load() }}
     {{ ckeditor.config(name='content') }}
     </div>

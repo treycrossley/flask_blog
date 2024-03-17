@@ -16,6 +16,15 @@
         {{form.password.label(class="form-label")}}
         {{form.password(class="form-control")}}
 
+          {%for fieldName, errorMessages in form.errors.items():%}
+          <p class="text-danger">There was an error with the {{fieldName}} field: 
+            {% for message in errorMessages%}
+            <br>
+            {{message}}
+           {% endfor %}
+           </p>
+        {%endfor%}
+
     </br>
     {{form.submit(class="btn btn-secondary")}}
     </form>
