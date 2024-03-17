@@ -46,6 +46,7 @@ def update(id):
                 return render_template('users/update.html', form=form, name_to_update=name_to_update)
         else:
             try:
+                name_to_update.profile_pic = None
                 db.session.commit()
                 flash("User updated!!")
                 return render_template('dashboard.html')

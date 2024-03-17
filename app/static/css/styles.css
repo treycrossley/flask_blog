@@ -10,3 +10,7 @@ body {
 #demo {
     font-size: 5em;
 }
+
+.profile-pic {
+    border-radius: 50%;
+}
