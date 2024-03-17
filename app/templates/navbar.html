@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <a class="navbar-brand" href="{{url_for('index')}}">BLOGGGGGGGERS</a>
+  <a class="navbar-brand" href="{{url_for('general.index')}}">BLOGGGGGGGERS</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -7,32 +7,36 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item">
-        <a class="nav-link" href="{{url_for('user', name='trey')}}">User Profile</a>
+        <a class="nav-link" href="{{url_for('general.dashboard')}}">User Profile</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="{{url_for('name')}}">Name</a>
+        <a class="nav-link" href="{{url_for('general.name')}}">Name</a>
       </li>
       
       {% if not current_user.is_authenticated %}
       <li class="nav-item">
-        <a class="nav-link" href="{{url_for('login')}}">Login</a>
+        <a class="nav-link" href="{{url_for('auth.login')}}">Login</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="{{url_for('add_user')}}">Register</a>
+        <a class="nav-link" href="{{url_for('users.add_user')}}">Register</a>
       </li>
+
       {% else %}
+    
       <li class="nav-item">
-        <a class="nav-link" href="{{url_for('logout')}}">Logout</a>
+        <a class="nav-link" href="{{url_for('auth.logout')}}">Logout</a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" href="{{url_for('dashboard')}}">dashboard</a>
-      </li>
+
       {% endif %}
       <li class="nav-item">
-        <a class="nav-link" href="{{url_for('add_post')}}">Add post</a>
+        <a class="nav-link" href="{{url_for('general.dashboard')}}">dashboard</a>
+      </li>
+      
+      <li class="nav-item">
+        <a class="nav-link" href="{{url_for('posts.add_post')}}">Add post</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="{{url_for('posts')}}">View All Posts</a>
+        <a class="nav-link" href="{{url_for('posts.posts')}}">View All Posts</a>
       </li>
     </ul>
     <form class="form-inline my-2 my-lg-0">

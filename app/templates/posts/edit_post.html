@@ -30,9 +30,9 @@
     </br>
     {{form.submit(class="btn btn-secondary")}}
 
-    <a class='btn btn-outline-danger btn-small' href="{{url_for('delete_post',id=post_id)}}">Delete post</a>
+    <a class='btn btn-outline-danger btn-small' href="{{url_for('posts.delete_post',id=post_id)}}">Delete post</a>
     </form>
     </div>
-    <a class='btn btn-outline-secondary btn-small' href="{{url_for('posts')}}">Back to all posts</a>
+    <a class='btn btn-outline-secondary btn-small' href="{{url_for('posts.posts')}}">Back to all posts</a>
 
 {% endblock %}
