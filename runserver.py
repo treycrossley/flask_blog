@@ -4,8 +4,6 @@ from flask import render_template
 from app.extensions import db,bcrypt
 from datetime import datetime,timezone
 from flask_login import UserMixin
-from app import models
-
 
 
 # Create Flask instance

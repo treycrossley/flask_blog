@@ -42,12 +42,16 @@ def edit_post(id):
 @login_required
 def delete_post(id):
     post_to_delete = Posts.query.get_or_404(id)
-    try:
-        db.session.delete(post_to_delete)
-        db.session.commit()
-        flash('Post deleted!!')
-    except Exception:
-        flash("Post deletion unsuccesful. Please try again!")
+    if current_user.id == post_to_delete.poster.id:
+        try:
+            db.session.delete(post_to_delete)
+            db.session.commit()
+            flash('Post deleted!!')
+        except Exception:
+            flash("Post deletion unsuccesful. Please try again!")
+        
+    else:
+        flash("You can't delete this post")
     posts = Posts.query.order_by(Posts.date_posted)
     return render_template("posts/posts.html", posts=posts)
     
