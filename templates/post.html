@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="shadow p-3 mb-5 bg-body-tertiary rounded">
+        <h2>{{post.title}}</h2> 
+
+        Posted by: {{post.author}} </br>
+        Posted on: {{post.date_posted}} </br> </br>
+
+        {{post.content}} </br> </br>
+    </div>
+
+    <a class='btn btn-outline-secondary btn-small' href="{{url_for('posts')}}">Back to all posts</a>
+
+{% endblock %}

@@ -12,7 +12,7 @@
    
 {% endfor %}
 
-<h1>Blog Posts...</h1>
+<h1>Blog Posts</h1>
 </br>
 
 {% for post in posts %}
@@ -23,6 +23,8 @@
         Posted on: {{post.date_posted}} </br> </br>
 
         {{post.content}} </br> </br>
+        <a class='btn btn-outline-secondary btn-small' href="{{ url_for('post', id=post.id)}}">View Post</a>
+
     </div>
 
 
