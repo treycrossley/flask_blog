@@ -12,7 +12,7 @@
 </div>
    
 {% endfor %}
-{% if id == current_user.id %}
+{% if id == current_user.id or current_user.is_admin %}
   
     <h1> Update User</h1>
     <br/>

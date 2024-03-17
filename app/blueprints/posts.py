@@ -34,7 +34,7 @@ def edit_post(id):
 
         return redirect(url_for('posts.post', id=post.id))
     
-    if current_user.id == post.poster_id:
+    if current_user.id == post.poster_id or current_user.is_admin:
         form.title.data=post.title
         form.slug.data=post.slug
         form.content.data=post.content
@@ -47,7 +47,7 @@ def edit_post(id):
 @login_required
 def delete_post(id):
     post_to_delete = Posts.query.get_or_404(id)
-    if current_user.id == post_to_delete.poster.id:
+    if current_user.id == post_to_delete.poster.id or current_user.is_admin:
         try:
             db.session.delete(post_to_delete)
             db.session.commit()
