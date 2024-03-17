@@ -14,3 +14,22 @@ body {
 .profile-pic {
     border-radius: 50%;
 }
+
+.card-img-top {
+    width: 75px;
+    height: 75px;
+    object-fit: cover;
+}
+
+.card_container {
+    display: flex;
+    flex-flow: column;
+}
+
+.info_container {
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  gap: 10px;
+}
+

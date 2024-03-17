@@ -22,8 +22,7 @@ def index():
 @login_required
 def admin():
     """Directs to admin page"""
-    id = current_user.id
-    if id == 3:
+    if current_user.is_admin:
         return render_template("admin.html")
     else:
         flash("You do not have admin privileges")
