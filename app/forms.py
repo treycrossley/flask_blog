@@ -15,6 +15,10 @@ class PostForm(FlaskForm):
     slug = StringField("Slug", validators=[DataRequired()])
     submit = SubmitField("Submit")
 
+class SearchForm(FlaskForm):
+    searched = StringField("Searched", validators=[DataRequired()])
+    submit = SubmitField("Submit")
+
 
 class NamerForm(FlaskForm):
     """class for asking user their name"""

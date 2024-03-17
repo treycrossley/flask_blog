@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, redirect, request, flash, url_for
-from app.models import Users
-from app.forms import LoginForm, NamerForm, PasswordForm
+from app.models import Users, Posts
+from app.forms import LoginForm, NamerForm, PasswordForm, SearchForm
 from app.extensions import db, bcrypt, login_manager
 from flask_login import login_required, login_user, logout_user
 
@@ -17,6 +17,22 @@ def index():
     """Directs to home page"""
     first_name = "Trey"
     return render_template("index.html", first_name=first_name)
+
+@general_bp.app_context_processor
+def base():
+    form = SearchForm()
+    return dict(form=form)
+
+@general_bp.route('/search', methods=["POST"])
+def search():
+    form = SearchForm()
+    posts = Posts.query
+    if form.validate_on_submit():
+        searched = form.searched.data
+        search_regex = '%' + searched + '%'
+        posts = posts.filter(Posts.content.like(search_regex), Posts.title.like(search_regex))
+        posts = posts.order_by(Posts.title).all()
+        return render_template("search.html", form=form, searched=searched, posts = posts)
 
 
 
