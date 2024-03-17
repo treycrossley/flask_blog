@@ -5,17 +5,29 @@ from wtforms import StringField, SubmitField, PasswordField, BooleanField, Valid
 from wtforms.validators import DataRequired, Email, EqualTo, Length
 from wtforms.widgets import TextArea
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import MetaData
 from flask_migrate import Migrate
 from datetime import datetime, timezone, date
 from flask_bcrypt import Bcrypt
+from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
+
+convention = {
+    "ix": 'ix_%(column_0_label)s',
+    "uq": "uq_%(table_name)s_%(column_0_name)s",
+    "ck": "ck_%(table_name)s_%(constraint_name)s",
+    "fk": "fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s",
+    "pk": "pk_%(table_name)s"
+}
+
+metadata = MetaData(naming_convention=convention)
 
 # Create Flask instance
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
 app.config["SECRET_KEY"] = "1234"
 bcrypt = Bcrypt(app)
-db = SQLAlchemy(app)
-migrate = Migrate(app,db)
+db = SQLAlchemy(app,metadata=metadata)
+migrate = Migrate(app,db, render_as_batch=True)
 
 class Posts(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -96,8 +108,9 @@ def add_post():
 
 
 
-class Users(db.Model):
+class Users(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(20), nullable=False, unique=True)
     name = db.Column(db.String(200), nullable=False)
     email = db.Column(db.String(200), nullable=False, unique=True)
     favorite_pizza_place = db.Column(db.String(200), default="You")
@@ -134,10 +147,25 @@ class PasswordForm(FlaskForm):
 
 class UserForm(FlaskForm):
     name = StringField("Name", validators=[DataRequired()])
+    username = StringField("Username", validators=[DataRequired()])
     email = StringField("email", validators=[DataRequired(), Email()])
     favorite_pizza_place = StringField("Favorite Pizza Place")
     password = PasswordField('Password', validators=[DataRequired(), EqualTo('password2', message='Passwords must match!')])
     password2 = PasswordField('Confirm Password', validators=[DataRequired()])
+    submit = SubmitField("Submit")
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'login'
+
+@login_manager.user_loader
+def load_user(user_id):
+    return Users.query.get(int(user_id))
+
+
+class LoginForm(FlaskForm):
+    username = StringField("Username", validators=[DataRequired()])
+    password= PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField("Submit")
 
 
@@ -147,6 +175,36 @@ def index():
     """Directs to home page"""
     first_name = "Trey"
     return render_template("index.html", first_name=first_name)
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        user = Users.query.filter_by(username=form.username.data).first()
+        if user:
+            if bcrypt.check_password_hash(user.password_hash, form.password.data):
+                login_user(user)
+                flash("Login sucessful!")
+                return redirect(url_for('dashboard'))
+            else: 
+                flash("Wrong Password - Try again!")
+        else: 
+            flash("User does not exist")
+    return render_template('login.html',form=form)
+
+
+@app.route('/logout', methods=['GET', 'POST'])
+@login_required
+def logout():
+    logout_user()
+    flash("You have been logged out!")
+    return redirect(url_for('login'))
+
+@app.route('/dashboard', methods=['GET', 'POST'])
+@login_required
+def dashboard():
+    return render_template('dashboard.html')
 
 @app.route('/update/<int:id>', methods=['GET', 'POST'])
 def update(id):
@@ -235,7 +293,7 @@ def add_user():
         user = Users.query.filter_by(email=form.email.data).first()
         if user is None:
             hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-            user = Users(name=form.name.data, email=form.email.data, favorite_pizza_place=form.favorite_pizza_place.data, password_hash = hashed_password)
+            user = Users(name=form.name.data, username=form.username.data, email=form.email.data, favorite_pizza_place=form.favorite_pizza_place.data, password_hash = hashed_password)
             db.session.add(user)
             db.session.commit()
         name = form.name.data
@@ -243,6 +301,7 @@ def add_user():
         form.email.data = ''
         form.favorite_pizza_place.data=''
         form.password.data = ''
+        form.username.data=''
         flash("User added!!")
     our_users = Users.query.order_by(Users.date_added)
     return render_template('add_user.html', form=form, name=name, our_users=our_users)

@@ -1,0 +1,26 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+    
+    {% for message in get_flashed_messages() %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+   Hey! {{message}}
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+   
+{% endfor %}
+
+  
+
+
+    <h1>Dashboard</h1>
+    <br/>
+    <p>You are Logged in!</p>
+
+
+    <a class="btn btn-outline-danger"href="{{url_for('logout')}}">logout</a>
+
+{% endblock %}
