@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, redirect, url_for, flash
-from flask_login import login_required
+from flask_login import current_user, login_required
 from app.models import Posts
 from app.forms import PostForm
 from app.extensions import db
@@ -25,7 +25,6 @@ def edit_post(id):
     form = PostForm()
     if form.validate_on_submit():
         post.title = form.title.data
-        post.author = form.author.data
         post.slug = form.slug.data
         post.content = form.content.data
 
@@ -35,7 +34,6 @@ def edit_post(id):
 
         return redirect(url_for('posts.post', id=post.id))
     form.title.data=post.title
-    form.author.data=post.author
     form.slug.data=post.slug
     form.content.data=post.content
     return render_template('posts/edit_post.html',form=form, post_id = id)
@@ -59,10 +57,10 @@ def delete_post(id):
 def add_post():
     form = PostForm()
     if form.validate_on_submit():
-        post = Posts(title=form.title.data, content=form.content.data, author=form.author.data, slug=form.slug.data)
+        poster = current_user.id
+        post = Posts(title=form.title.data, content=form.content.data, poster_id=poster, slug=form.slug.data)
         form.title.data = ''
         form.content.data = ''
-        form.author.data = ''
         form.slug.data = ''
 
         db.session.add(post)

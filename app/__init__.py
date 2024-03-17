@@ -1,10 +1,8 @@
 from os import environ
 from flask import Flask
 from .extensions import db, migrate, bcrypt, login_manager
-from app.blueprints.users import users_bp
-from app.blueprints.auth import auth_bp
-from app.blueprints.posts import posts_bp
-from app.blueprints.general import general_bp
+from app.blueprints import auth_bp, posts_bp, general_bp, users_bp
+
 
 
 
@@ -20,6 +18,10 @@ def create_app():
     bcrypt.init_app(app)
     login_manager.init_app(app)
     login_manager.login_view = 'auth.login'
+
+    with app.app_context():
+        db.create_all()
+    
     
     _register_blueprints(app)
     
