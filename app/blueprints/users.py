@@ -1,5 +1,5 @@
-from flask import Blueprint, render_template, request, flash, current_app
-from flask_login import login_required
+from flask import Blueprint, render_template, request, flash, current_app, redirect, url_for
+from flask_login import current_user, login_required
 from app.models import Users
 from app.forms import UserForm
 from app.extensions import db, bcrypt
@@ -58,18 +58,22 @@ def update(id):
 @users_bp.route('/delete/<int:id>')
 @login_required
 def delete(id):
-    user_to_delete = Users.query.get_or_404(id)
-    name = None
-    form = UserForm()
-    try:
-        db.session.delete(user_to_delete)
-        db.session.commit()
-        flash("USER DELETED")
-        our_users = Users.query.order_by(Users.date_added)
-        return render_template('add_user.html', form=form, name=name, our_users=our_users)
-    except BaseException:
-        flash("OOPSIES. SOMETHING WENT WRONG")
-        return render_template('users/add_user.html', form=form, name=name, our_users=our_users)
+    if id == current_user.id or current_user.is_admin:
+        user_to_delete = Users.query.get_or_404(id)
+        name = None
+        form = UserForm()
+        try:
+            db.session.delete(user_to_delete)
+            db.session.commit()
+            flash("USER DELETED")
+            our_users = Users.query.order_by(Users.date_added)
+            return render_template('add_user.html', form=form, name=name, our_users=our_users)
+        except BaseException:
+            flash("OOPSIES. SOMETHING WENT WRONG")
+            return render_template('users/add_user.html', form=form, name=name, our_users=our_users)
+    else:
+            flash("You don't have permission to delete this user")
+            return redirect(url_for('general.dashboard'))
 
 @users_bp.route('/<name>')
 def user(name):
