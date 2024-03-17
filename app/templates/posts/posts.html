@@ -24,9 +24,10 @@
 
         {{post.content}} </br> </br>
         <a class='btn btn-outline-secondary btn-small' href="{{url_for('posts.post', id=post.id)}}">View Post</a>
+        {% if post.poster_id == current_user.id %}
         <a class='btn btn-outline-secondary btn-small' href="{{url_for('posts.edit_post', id=post.id)}}">Edit Post</a>
         <a class='btn btn-outline-danger btn-small' href="{{url_for('posts.delete_post', id=post.id)}}">Delete Post</a>
-
+        {% endif %}
 
     </div>
 
