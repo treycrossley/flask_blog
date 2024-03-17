@@ -56,6 +56,7 @@ def post(id):
   
 
 @app.route('/posts/edit/<int:id>', methods=['GET','POST'])
+@login_required
 def edit_post(id):
     post = Posts.query.get_or_404(id)
     form = PostForm()
@@ -77,6 +78,7 @@ def edit_post(id):
     return render_template('edit_post.html',form=form, post_id = id)
 
 @app.route('/posts/delete/<int:id>')
+@login_required
 def delete_post(id):
     post_to_delete = Posts.query.get_or_404(id)
     try:
@@ -90,6 +92,7 @@ def delete_post(id):
     
 
 @app.route('/add-post', methods=['GET', 'POST'])
+@login_required
 def add_post():
     form = PostForm()
     if form.validate_on_submit():
