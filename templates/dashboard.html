@@ -13,14 +13,28 @@
    
 {% endfor %}
 
-  
-
 
     <h1>Dashboard</h1>
     <br/>
     <p>You are Logged in!</p>
+<div></div>
 
+<div class="card">
+  <div class="card-header">
+    {{current_user.name}}
+  </div>
+  <div class="card-body">
+    <h5 class="card-title">Welcome to your dashboard!</h5>
+    <p class="card-text">
+        <strong>Username: </strong> {{current_user.username}}</br>
+        <strong>User ID:</strong>  {{current_user.id}} </br>
+        <strong>email: </strong> {{current_user.email}}</br>
+        <strong>Favorite Pizza Place: </strong> {{current_user.favorite_pizza_place}}  </br>
+        <strong>Date Joined: </strong> {{current_user.date_added}}  </br>
+    </p>
+    <a class="btn btn-outline-danger" href="{{url_for('logout')}}">logout</a>
+  </div>
+</div>
 
-    <a class="btn btn-outline-danger"href="{{url_for('logout')}}">logout</a>
-
+    
 {% endblock %}
