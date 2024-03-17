@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <a class="navbar-brand" href="{{url_for('general.index')}}">BLOGGGGGGGERS</a>
+  <a class="navbar-brand" href="{{url_for('general.home')}}">BLOGGGGGGGERS</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -7,13 +7,20 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item">
-        <a class="nav-link" href="{{url_for('users.add_user')}}">User List</a>
+        <a class="nav-link" href="{{url_for('general.home')}}">Home</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="{{url_for('general.name')}}">Name</a>
+        <a class="nav-link" href="{{url_for('general.about')}}">About</a>
       </li>
-      
-      {% if not current_user.is_authenticated %}
+    </ul>
+    <form method="POST" action="{{url_for('general.search')}}" class="form-inline my-2 my-lg-0">
+      {{form.hidden_tag()}}
+      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="searched">
+
+      <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">Search</button>
+    </form>
+    <ul class="navbar-nav me-auto">
+        {% if not current_user.is_authenticated %}
       <li class="nav-item">
         <a class="nav-link" href="{{url_for('auth.login')}}">Login</a>
       </li>
@@ -22,32 +29,10 @@
       </li>
 
       {% else %}
-    
       <li class="nav-item">
         <a class="nav-link" href="{{url_for('auth.logout')}}">Logout</a>
       </li>
-      {% if current_user.id == 3%}
-      <li class="nav-item">
-        <a class="nav-link" href="{{url_for('general.admin')}}">Admin</a>
-      </li>
-      {%endif%}
-
       {% endif %}
-      <li class="nav-item">
-        <a class="nav-link" href="{{url_for('general.dashboard')}}">dashboard</a>
-      </li>
-      
-      <li class="nav-item">
-        <a class="nav-link" href="{{url_for('posts.add_post')}}">Add post</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="{{url_for('posts.posts')}}">View All Posts</a>
-      </li>
     </ul>
-    <form method="POST" action="{{url_for('general.search')}}" class="form-inline my-2 my-lg-0">
-      {{form.hidden_tag()}}
-      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="searched">
-      <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">Search</button>
-    </form>
   </div>
 </nav>

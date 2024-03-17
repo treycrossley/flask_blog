@@ -10,7 +10,12 @@ posts_bp = Blueprint("posts", __name__, url_prefix='/posts', template_folder="..
 @posts_bp.route('/')
 def posts():
     posts = Posts.query.order_by(Posts.date_posted)
-    print(posts)
+    return render_template("posts/posts.html", posts=posts)
+
+@posts_bp.route('/myposts')
+@login_required
+def my_posts():
+    posts = Posts.query.filter_by(poster_id=current_user.id).all()
     return render_template("posts/posts.html", posts=posts)
 
 @posts_bp.route('/<int:id>')

@@ -24,7 +24,7 @@
         {%endif%}
         <div class="poster-info">
            Posted by: {{post.poster.name}} </br>
-        Posted on: {{post.date_posted}}
+        Posted on: {{post.date_posted.strftime("%a, %d %b, %Y")}}
         </div>
         </div>
 

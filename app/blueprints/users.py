@@ -81,6 +81,33 @@ def user(name):
     """directs to user page"""
     return render_template("users/user.html", name=name)
 
+@users_bp.route('adminify/<int:id>/<int:setAdmin>')
+@login_required
+def alter_admin(id, setAdmin=True):
+    if not current_user.is_admin:
+        flash("You don't have permission to alter admin access to this user")
+        return redirect(url_for('general.dashboard'))
+    
+    user = Users.query.get_or_404(id)
+    if not user:
+        flash("User does not exist in DB")
+        return redirect(url_for('general.dashboard'))
+    if user.is_admin and setAdmin:
+        flash("User is already admin")
+        return redirect(url_for('general.admin'))
+    if not user.is_admin and not setAdmin:
+        flash("User already is not an admin")
+        return redirect(url_for('general.admin'))
+    try:
+        user.is_admin = setAdmin
+        db.session.commit()
+        flash("User admin privileges have been updated!")
+    except Exception:
+        flash("Something went wrong! Sorry!")
+    return redirect(url_for('general.admin'))
+
+
+
 @users_bp.route('/add', methods=['GET', 'POST'])
 def add_user():
     name = None
