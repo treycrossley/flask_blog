@@ -14,32 +14,52 @@
     <form method="POST">
         {{form.hidden_tag() }}
         {{form.name.label(class="form-label")}}
+        {% if form.name.errors %}
+            {% for err in form.name.errors %}
+                <span class="text-danger font-italic">{{err}}</span>
+            {%endfor%}
+        {% endif %}
         {{form.name(class="form-control")}}
-
+        <br>
         {{form.username.label(class="form-label")}}
+        {% if form.username.errors %}
+            {% for err in form.username.errors %}
+                <span class="text-danger font-italic">{{err}}</span>
+            {%endfor%}
+        {% endif %}
         {{form.username(class="form-control")}}
-
+        <br>
         {{form.email.label(class="form-label")}}
+        {% if form.email.errors %}
+            {% for err in form.email.errors %}
+                <span class="text-danger font-italic">{{err}}</span>
+            {%endfor%}
+        {% endif %}
         {{form.email(class="form-control")}}
-
+        <br>
         {{form.favorite_pizza_place.label(class="form-label")}}
+        {% if form.favorite_pizza_place.errors %}
+            {% for err in form.favorite_pizza_place.errors %}
+                <span class="text-danger font-italic">{{err}}</span>
+            {%endfor%}
+        {% endif %}
         {{form.favorite_pizza_place(class="form-control")}}
-
+        <br>
         {{form.password.label(class="form-label")}}
+        {% if form.password.errors %}
+            {% for err in form.password.errors %}
+                <span class="text-danger font-italic">{{err}}</span>
+            {%endfor%}
+        {% endif %}
         {{form.password(class="form-control")}}
-
+        <br>
         {{form.password2.label(class="form-label")}}
+        {% if form.password2.errors %}
+            {% for err in form.password2.errors %}
+                <span class="text-danger font-italic">{{err}}</span>
+            {%endfor%}
+        {% endif %}
         {{form.password2(class="form-control")}}
-
-
-          {%for fieldName, errorMessages in form.errors.items():%}
-          <p class="text-danger">There was an error with the {{fieldName}} field: 
-            {% for message in errorMessages%}
-            <br>
-            {{message}}
-           {% endfor %}
-           </p>
-        {%endfor%}
    
     </br>
     {{form.submit(class="btn btn-secondary")}}
