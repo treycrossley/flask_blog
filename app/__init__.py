@@ -1,11 +1,8 @@
 from os import environ
 from flask import Flask
+from config import config_by_name
 from .extensions import db, migrate, bcrypt, login_manager, ckEditor
 from app.blueprints import auth_bp, posts_bp, general_bp, users_bp
-from config import config_by_name
-
-
-
 
 
 def get_settings():

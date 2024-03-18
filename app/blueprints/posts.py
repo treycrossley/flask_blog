@@ -4,26 +4,35 @@ from app.models import Posts
 from app.forms import PostForm
 from app.extensions import db
 
-posts_bp = Blueprint("posts", __name__, url_prefix='/posts', template_folder="../../templates")
+posts_bp = Blueprint(
+    "posts", __name__, url_prefix="/posts", template_folder="../../templates"
+)
 
 
-@posts_bp.route('/')
+@posts_bp.route("/")
 def posts():
     posts = Posts.query.order_by(Posts.date_posted.desc())
     return render_template("posts/posts.html", posts=posts)
 
-@posts_bp.route('/myposts')
+
+@posts_bp.route("/myposts")
 @login_required
 def my_posts():
-    posts= Posts.query.filter_by(poster_id=current_user.id).order_by(Posts.date_posted.desc()).all()
+    posts = (
+        Posts.query.filter_by(poster_id=current_user.id)
+        .order_by(Posts.date_posted.desc())
+        .all()
+    )
     return render_template("posts/posts.html", posts=posts)
 
-@posts_bp.route('/<int:id>')
+
+@posts_bp.route("/<int:id>")
 def post(id):
     post = Posts.query.get_or_404(id)
-    return render_template('posts/post.html', post=post) 
+    return render_template("posts/post.html", post=post)
 
-@posts_bp.route('/edit/<int:id>', methods=['GET','POST'])
+
+@posts_bp.route("/edit/<int:id>", methods=["GET", "POST"])
 @login_required
 def edit_post(id):
     post = Posts.query.get_or_404(id)
@@ -36,21 +45,22 @@ def edit_post(id):
         try:
             db.session.add(post)
             db.session.commit()
-            flash('Post has been updated')
+            flash("Post has been updated")
         except Exception:
             flash("DB could not update post. try again")
-        return redirect(url_for('posts.post', id=post.id))
-    
+        return redirect(url_for("posts.post", id=post.id))
+
     if current_user.id == post.poster_id or current_user.is_admin:
-        form.title.data=post.title
-        form.slug.data=post.slug
-        form.content.data=post.content
-        return render_template('posts/edit_post.html',form=form, post_id = id)
+        form.title.data = post.title
+        form.slug.data = post.slug
+        form.content.data = post.content
+        return render_template("posts/edit_post.html", form=form, post_id=id)
     flash("You are not authorized to edit this post")
     posts = Posts.query.order_by(Posts.date_posted.desc())
-    return redirect(url_for('posts/posts.html', posts=posts))
+    return redirect(url_for("posts/posts.html", posts=posts))
 
-@posts_bp.route('/delete/<int:id>')
+
+@posts_bp.route("/delete/<int:id>")
 @login_required
 def delete_post(id):
     post_to_delete = Posts.query.get_or_404(id)
@@ -58,35 +68,38 @@ def delete_post(id):
         try:
             db.session.delete(post_to_delete)
             db.session.commit()
-            flash('Post deleted!!')
+            flash("Post deleted!!")
         except Exception:
             flash("Post deletion unsuccesful. Please try again!")
-        
+
     else:
         flash("You can't delete this post")
     posts = Posts.query.order_by(Posts.date_posted.desc())
-    return redirect(url_for('posts/posts.html', posts=posts))
+    return redirect(url_for("posts/posts.html", posts=posts))
 
-@posts_bp.route('/add', methods=['GET', 'POST'])
+
+@posts_bp.route("/add", methods=["GET", "POST"])
 @login_required
 def add_post():
     form = PostForm()
     if form.validate_on_submit():
         poster = current_user.id
-        post = Posts(title=form.title.data, content=form.content.data, poster_id=poster, slug=form.slug.data)
-        form.title.data = ''
-        form.content.data = ''
-        form.slug.data = ''
+        post = Posts(
+            title=form.title.data,
+            content=form.content.data,
+            poster_id=poster,
+            slug=form.slug.data,
+        )
+        form.title.data = ""
+        form.content.data = ""
+        form.slug.data = ""
         try:
             db.session.add(post)
             db.session.commit()
-            
+
             flash("Post succesfully submitted!")
         except Exception:
             flash("Something went wrong!")
-            return render_template('posts/add_post.html', form=form)
-        return redirect(url_for('posts.post', id=post.id))
-    return render_template('posts/add_post.html', form=form)
-    
-
-
+            return render_template("posts/add_post.html", form=form)
+        return redirect(url_for("posts.post", id=post.id))
+    return render_template("posts/add_post.html", form=form)

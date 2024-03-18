@@ -4,10 +4,12 @@ from app.forms import LoginForm
 from app.extensions import db, bcrypt
 from flask_login import current_user, login_required, login_user, logout_user
 
-auth_bp = Blueprint("auth", __name__, url_prefix='/auth', template_folder="../../templates")
+auth_bp = Blueprint(
+    "auth", __name__, url_prefix="/auth", template_folder="../../templates"
+)
 
 
-@auth_bp.route('/login', methods=['GET', 'POST'])
+@auth_bp.route("/login", methods=["GET", "POST"])
 def login():
     form = LoginForm()
     if form.validate_on_submit():
@@ -18,20 +20,20 @@ def login():
                     login_user(user)
                     flash("Login sucessful!")
                     if current_user.is_admin:
-                        return redirect(url_for('general.admin'))
-                    return redirect(url_for('general.home'))
-                else: 
+                        return redirect(url_for("general.admin"))
+                    return redirect(url_for("general.home"))
+                else:
                     flash("Wrong Password - Try again!")
-            else: 
+            else:
                 flash("User does not exist")
         except Exception:
             flash("Could not get User from db")
-    return render_template('login.html',form=form)
+    return render_template("login.html", form=form)
 
 
-@auth_bp.route('/logout', methods=['GET', 'POST'])
+@auth_bp.route("/logout", methods=["GET", "POST"])
 @login_required
 def logout():
     logout_user()
     flash("You have been logged out!")
-    return redirect(url_for('auth.login'))
+    return redirect(url_for("auth.login"))
