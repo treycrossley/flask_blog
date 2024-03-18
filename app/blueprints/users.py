@@ -117,15 +117,18 @@ def add_user():
         if user is None:
             hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
             user = Users(name=form.name.data, username=form.username.data, email=form.email.data, favorite_pizza_place=form.favorite_pizza_place.data, password_hash = hashed_password)
-            db.session.add(user)
-            db.session.commit()
+            try:
+                db.session.add(user)
+                db.session.commit()
+                flash("User added!!")
+            except Exception:
+                flash("Something went wrong")
         name = form.name.data
         form.name.data = ''
         form.email.data = ''
         form.favorite_pizza_place.data=''
         form.password.data = ''
         form.username.data=''
-        flash("User added!!")
     our_users = Users.query.order_by(Users.date_added)
     return render_template('users/add_user.html', form=form, name=name, our_users=our_users)
 

@@ -33,10 +33,12 @@ def edit_post(id):
         post.slug = form.slug.data
         post.content = form.content.data
 
-        db.session.add(post)
-        db.session.commit()
-        flash('Post has been updated')
-
+        try:
+            db.session.add(post)
+            db.session.commit()
+            flash('Post has been updated')
+        except Exception:
+            flash("DB could not update post. try again")
         return redirect(url_for('posts.post', id=post.id))
     
     if current_user.id == post.poster_id or current_user.is_admin:
@@ -76,11 +78,12 @@ def add_post():
         form.title.data = ''
         form.content.data = ''
         form.slug.data = ''
-
-        db.session.add(post)
-        db.session.commit()
-
-        flash("Post succesfully submitted!")
+        try:
+            db.session.add(post)
+            db.session.commit()
+            flash("Post succesfully submitted!")
+        except Exception:
+            flash("Something went wrong!")
     return render_template('posts/add_post.html', form=form)
 
 

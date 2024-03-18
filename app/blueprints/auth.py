@@ -11,16 +11,19 @@ auth_bp = Blueprint("auth", __name__, url_prefix='/auth', template_folder="../..
 def login():
     form = LoginForm()
     if form.validate_on_submit():
-        user = Users.query.filter_by(username=form.username.data).first()
-        if user:
-            if bcrypt.check_password_hash(user.password_hash, form.password.data):
-                login_user(user)
-                flash("Login sucessful!")
-                return redirect(url_for('general.dashboard'))
+        try:
+            user = Users.query.filter_by(username=form.username.data).first()
+            if user:
+                if bcrypt.check_password_hash(user.password_hash, form.password.data):
+                    login_user(user)
+                    flash("Login sucessful!")
+                    return redirect(url_for('general.dashboard'))
+                else: 
+                    flash("Wrong Password - Try again!")
             else: 
-                flash("Wrong Password - Try again!")
-        else: 
-            flash("User does not exist")
+                flash("User does not exist")
+        except Exception:
+            flash("Could not get User from db")
     return render_template('login.html',form=form)
 
 
