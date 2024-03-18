@@ -1,12 +1,4 @@
-from flask import (
-    Blueprint,
-    render_template,
-    request,
-    flash,
-    current_app,
-    redirect,
-    url_for,
-)
+from flask import Blueprint, render_template, request, flash, current_app, redirect, url_for
 from flask_login import current_user, login_required, login_user
 from app.models import Users
 from app.forms import UserForm
@@ -23,6 +15,17 @@ users_bp = Blueprint(
 @users_bp.route("/update/<int:id>", methods=["GET", "POST"])
 @login_required
 def update(id):
+    """
+    Allows users to update their profile information.
+
+    Args:
+        id (int): The ID of the user to update.
+
+    Returns:
+        Response: Redirects the user to the dashboard page after updating their profile
+        information or renders the update page with an error message if the update
+        fails.
+    """
     form = UserForm()
     name_to_update = Users.query.get_or_404(id)
     if request.method == "POST":
@@ -75,6 +78,15 @@ def update(id):
 @users_bp.route("/delete/<int:id>")
 @login_required
 def delete(id):
+    """
+    Allows users to delete their account.
+
+    Args:
+        id (int): The ID of the user to delete.
+
+    Returns:
+        Response: Redirects the user to the add user page after deletion.
+    """
     if id == current_user.id or current_user.is_admin:
         user_to_delete = Users.query.get_or_404(id)
         name = None
@@ -99,68 +111,10 @@ def delete(id):
 
 @users_bp.route("/<name>")
 def user(name):
-    """directs to user page"""
+    """Directs to user page."""
     return render_template("users/user.html", name=name)
 
 
 @users_bp.route("adminify/<int:id>/<int:setAdmin>")
 @login_required
-def alter_admin(id, setAdmin=True):
-    if not current_user.is_admin:
-        flash("You don't have permission to alter admin access to this user")
-        return redirect(url_for("general.dashboard"))
-
-    user = Users.query.get_or_404(id)
-    if not user:
-        flash("User does not exist in DB")
-        return redirect(url_for("general.dashboard"))
-    if user.is_admin and setAdmin:
-        flash("User is already admin")
-        return redirect(url_for("general.admin"))
-    if not user.is_admin and not setAdmin:
-        flash("User already is not an admin")
-        return redirect(url_for("general.admin"))
-    try:
-        user.is_admin = setAdmin
-        db.session.commit()
-        flash("User admin privileges have been updated!")
-    except Exception:
-        flash("Something went wrong! Sorry!")
-    return redirect(url_for("general.admin"))
-
-
-@users_bp.route("/add", methods=["GET", "POST"])
-def add_user():
-    name = None
-    form = UserForm()
-    if form.validate_on_submit():
-        user = Users.query.filter_by(email=form.email.data).first()
-        if user is None:
-            hashed_password = bcrypt.generate_password_hash(form.password.data).decode(
-                "utf-8"
-            )
-            user = Users(
-                name=form.name.data,
-                username=form.username.data,
-                email=form.email.data,
-                favorite_pizza_place=form.favorite_pizza_place.data,
-                password_hash=hashed_password,
-            )
-            try:
-                db.session.add(user)
-                db.session.commit()
-                flash("User added!!")
-                if current_user is None:
-                    login_user(user)
-            except Exception:
-                flash("Something went wrong")
-        name = form.name.data
-        form.name.data = ""
-        form.email.data = ""
-        form.favorite_pizza_place.data = ""
-        form.password.data = ""
-        form.username.data = ""
-    our_users = Users.query.order_by(Users.date_added.desc())
-    return render_template(
-        "users/add_user.html", form=form, name=name, our_users=our_users
-    )
+def alter_admin(id, setAdm

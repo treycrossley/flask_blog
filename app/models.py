@@ -1,11 +1,11 @@
 from datetime import datetime, timezone
 from flask_login import UserMixin
-
-
 from .extensions import db, bcrypt
 
 
 class Users(db.Model, UserMixin):
+    """Model for representing users in the database."""
+
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), nullable=False, unique=True)
     name = db.Column(db.String(200), nullable=False)
@@ -20,20 +20,26 @@ class Users(db.Model, UserMixin):
 
     @property
     def password(self):
+        """Getter for the user's password."""
         raise AttributeError("password is not a readable attribute")
 
     @password.setter
     def password(self, password):
+        """Setter for the user's password."""
         self.password_hash = bcrypt.generate_password_hash(password).decode("utf-8")
 
     def verify_password(self, password):
+        """Verify the user's password."""
         return bcrypt.check_password_hash(self.password_hash, password)
 
     def __repr__(self):
-        return "<Name %r>" % self.name
+        """Representation of the user object."""
+        return f"<User {self.username}>"
 
 
 class Posts(db.Model):
+    """Model for representing posts in the database."""
+
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(255))
     content = db.Column(db.Text)

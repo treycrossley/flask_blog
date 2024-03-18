@@ -11,6 +11,12 @@ posts_bp = Blueprint(
 
 @posts_bp.route("/")
 def posts():
+    """
+    Renders the page displaying all posts.
+
+    Returns:
+        str: The rendered HTML page displaying all posts.
+    """
     posts = Posts.query.order_by(Posts.date_posted.desc())
     return render_template("posts/posts.html", posts=posts)
 
@@ -18,6 +24,12 @@ def posts():
 @posts_bp.route("/myposts")
 @login_required
 def my_posts():
+    """
+    Renders the page displaying posts created by the current user.
+
+    Returns:
+        str: The rendered HTML page displaying posts created by the current user.
+    """
     posts = (
         Posts.query.filter_by(poster_id=current_user.id)
         .order_by(Posts.date_posted.desc())
@@ -28,6 +40,15 @@ def my_posts():
 
 @posts_bp.route("/<int:id>")
 def post(id):
+    """
+    Renders the page displaying a single post.
+
+    Args:
+        id (int): The ID of the post to display.
+
+    Returns:
+        str: The rendered HTML page displaying the specified post.
+    """
     post = Posts.query.get_or_404(id)
     return render_template("posts/post.html", post=post)
 
@@ -35,6 +56,16 @@ def post(id):
 @posts_bp.route("/edit/<int:id>", methods=["GET", "POST"])
 @login_required
 def edit_post(id):
+    """
+    Allows users to edit a post.
+
+    Args:
+        id (int): The ID of the post to edit.
+
+    Returns:
+        Response: Redirects the user to the post page after editing or back to the edit
+        post page if there was an error.
+    """
     post = Posts.query.get_or_404(id)
     form = PostForm()
     if form.validate_on_submit():
@@ -63,6 +94,15 @@ def edit_post(id):
 @posts_bp.route("/delete/<int:id>")
 @login_required
 def delete_post(id):
+    """
+    Allows users to delete a post.
+
+    Args:
+        id (int): The ID of the post to delete.
+
+    Returns:
+        Response: Redirects the user to the posts page after deletion.
+    """
     post_to_delete = Posts.query.get_or_404(id)
     if current_user.id == post_to_delete.poster.id or current_user.is_admin:
         try:
@@ -81,6 +121,13 @@ def delete_post(id):
 @posts_bp.route("/add", methods=["GET", "POST"])
 @login_required
 def add_post():
+    """
+    Allows users to add a new post.
+
+    Returns:
+        Response: Redirects the user to the posts page after adding the post or back to
+        the add post page if there was an error.
+    """
     form = PostForm()
     if form.validate_on_submit():
         poster = current_user.id

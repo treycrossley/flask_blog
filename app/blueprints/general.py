@@ -11,31 +11,47 @@ general_bp = Blueprint(
 
 @login_manager.user_loader
 def load_user(user_id):
+    """
+    Load a user by its ID.
+
+    Args:
+        user_id (int): The ID of the user.
+
+    Returns:
+        User: The user corresponding to the given ID.
+    """
     return Users.query.get(int(user_id))
 
 
 @general_bp.route("/")
 def index():
-    """Directs to home page"""
+    """Directs to the home page."""
     return redirect(url_for("posts.posts"))
 
 
 @general_bp.route("/about")
 def about():
-    """Directs to home page"""
+    """Directs to the about page."""
     return render_template("about.html")
 
 
 @general_bp.route("/home")
 def home():
+    """Directs to the home page."""
     return redirect(url_for("posts.posts"))
 
 
 @general_bp.route("/admin")
 @login_required
 def admin():
+    """
+    Directs to the admin page if the current user is an admin.
+
+    Returns:
+        Response: The admin page template if the user is an admin, otherwise redirects
+        to the dashboard.
+    """
     our_users = Users.query.order_by(Users.date_added.desc())
-    """Directs to admin page"""
     if current_user.is_admin:
         return render_template("admin.html", our_users=our_users)
     else:
@@ -45,12 +61,24 @@ def admin():
 
 @general_bp.app_context_processor
 def base():
+    """
+    Injects the search form into the context of all templates in the blueprint.
+
+    Returns:
+        dict: A dictionary containing the search form.
+    """
     form = SearchForm()
     return dict(form=form)
 
 
 @general_bp.route("/search", methods=["POST"])
 def search():
+    """
+    Handles searching for posts.
+
+    Returns:
+        Response: The search results page template.
+    """
     form = SearchForm()
     posts = Posts.query
     if form.validate_on_submit():
@@ -66,4 +94,10 @@ def search():
 @general_bp.route("/dashboard", methods=["GET", "POST"])
 @login_required
 def dashboard():
+    """
+    Directs to the dashboard page.
+
+    Returns:
+        Response: The dashboard page template.
+    """
     return render_template("dashboard.html")

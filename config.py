@@ -1,10 +1,9 @@
-from os import path, environ
-
-
-BASE_DIR = path.abspath(path.dirname(__file__))
+from os import path
 
 
 class Config:
+    """Base configuration class."""
+
     SECRET_KEY = "1234"
     SQLALCHEMY_DATABASE_URI = "sqlite:///blog.db"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
@@ -12,16 +11,17 @@ class Config:
 
 
 class DevConfig(Config):
+    """Development configuration class."""
+
     DEBUG = True
-    pass
 
 
 class TestConfig(Config):
+    """Test configuration class."""
+
     SQLALCHEMY_DATABASE_URI = "sqlite:///test_blog.db"
     TESTING = True
     WTF_CSRF_ENABLED = True
-
-    pass
 
 
 config_by_name = dict(dev=DevConfig, test=TestConfig)

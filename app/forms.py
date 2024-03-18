@@ -6,12 +6,16 @@ from flask_wtf.file import FileField
 
 
 class LoginForm(FlaskForm):
+    """Form for user login"""
+
     username = StringField("Username", validators=[DataRequired()])
     password = PasswordField("Password", validators=[DataRequired()])
     submit = SubmitField("Submit")
 
 
 class PostForm(FlaskForm):
+    """Form for creating or editing a post"""
+
     title = StringField("Title", validators=[DataRequired()])
     content = CKEditorField("Content", validators=[DataRequired()])
     author = StringField("Author")
@@ -20,19 +24,21 @@ class PostForm(FlaskForm):
 
 
 class SearchForm(FlaskForm):
+    """Form for searching"""
+
     searched = StringField("Searched", validators=[DataRequired()])
     submit = SubmitField("Submit")
 
 
 class NamerForm(FlaskForm):
-    """class for asking user their name"""
+    """Form for asking user's name"""
 
     name = StringField("What's your name", validators=[DataRequired()])
     submit = SubmitField("Submit")
 
 
 class PasswordForm(FlaskForm):
-    """class for asking user their name"""
+    """Form for asking user's email and password"""
 
     email = StringField("What's your email", validators=[DataRequired()])
     pw = PasswordField("What's your password", validators=[DataRequired()])
@@ -40,6 +46,8 @@ class PasswordForm(FlaskForm):
 
 
 class UserForm(FlaskForm):
+    """Form for creating or editing a user"""
+
     name = StringField("Name", validators=[DataRequired()])
     username = StringField("Username", validators=[DataRequired()])
     email = StringField("email", validators=[DataRequired(), Email()])

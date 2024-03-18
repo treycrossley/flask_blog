@@ -1,9 +1,17 @@
 import pytest
-import pdb
 from flask_wtf.csrf import generate_csrf
+from app.forms import LoginForm, PostForm, SearchForm, NamerForm, PasswordForm, UserForm
 
 
 def test_login_form_validation(app, forms):
+    """
+    Test the validation of the login form.
+
+    Args:
+        app: Flask application instance.
+        forms: Fixture providing access to form classes.
+
+    """
     LoginForm = forms["LoginForm"]
     with app.test_request_context(
         "/auth/login",
@@ -12,22 +20,31 @@ def test_login_form_validation(app, forms):
     ):
         form = LoginForm()
         form.csrf_token.data = generate_csrf()
+
         # Test valid data
-        assert form.validate()  # Should pass validation with valid data
+        assert form.validate()
 
         # Test missing username
         form.username.data = ""
         form.password.data = "valid_password"
-        assert not form.validate()  # Should fail validation without username
+        assert not form.validate()
 
         # Test missing password
         form.username.data = "valid_username"
         form.password.data = ""
-        assert not form.validate()  # Should fail validation without password
+        assert not form.validate()
 
 
 # Test for PostForm
 def test_post_form_validation(app, forms):
+    """
+    Test the validation of the post form.
+
+    Args:
+        app: Flask application instance.
+        forms: Fixture providing access to form classes.
+
+    """
     PostForm = forms["PostForm"]
     with app.test_request_context(
         "/submit_post",
@@ -43,25 +60,33 @@ def test_post_form_validation(app, forms):
         form.csrf_token.data = generate_csrf()
 
         # Test valid data
-        assert form.validate()  # Should pass validation with valid data
+        assert form.validate()
 
         # Test missing title
         form.title.data = ""
-        assert not form.validate()  # Should fail validation without title
+        assert not form.validate()
 
         # Test missing content
         form.title.data = "Test Post"
         form.content.data = ""
-        assert not form.validate()  # Should fail validation without content
+        assert not form.validate()
 
         # Test missing slug
         form.content.data = "This is a test post."
         form.slug.data = ""
-        assert not form.validate()  # Should fail validation without slug
+        assert not form.validate()
 
 
 # Test for SearchForm
 def test_search_form_validation(app, forms):
+    """
+    Test the validation of the search form.
+
+    Args:
+        app: Flask application instance.
+        forms: Fixture providing access to form classes.
+
+    """
     SearchForm = forms["SearchForm"]
     with app.test_request_context(
         "/search", method="POST", data={"searched": "keyword"}
@@ -70,30 +95,46 @@ def test_search_form_validation(app, forms):
         form.csrf_token.data = generate_csrf()
 
         # Test valid data
-        assert form.validate()  # Should pass validation with valid data
+        assert form.validate()
 
         # Test missing searched term
         form.searched.data = ""
-        assert not form.validate()  # Should fail validation without searched term
+        assert not form.validate()
 
 
 # Test for NamerForm
 def test_namer_form_validation(app, forms):
+    """
+    Test the validation of the namer form.
+
+    Args:
+        app: Flask application instance.
+        forms: Fixture providing access to form classes.
+
+    """
     NamerForm = forms["NamerForm"]
     with app.test_request_context("/get_name", method="POST", data={"name": "John"}):
         form = NamerForm()
         form.csrf_token.data = generate_csrf()
 
         # Test valid data
-        assert form.validate()  # Should pass validation with valid data
+        assert form.validate()
 
         # Test missing name
         form.name.data = ""
-        assert not form.validate()  # Should fail validation without name
+        assert not form.validate()
 
 
 # Test for PasswordForm
 def test_password_form_validation(app, forms):
+    """
+    Test the validation of the password form.
+
+    Args:
+        app: Flask application instance.
+        forms: Fixture providing access to form classes.
+
+    """
     PasswordForm = forms["PasswordForm"]
     with app.test_request_context(
         "/register", method="POST", data={"email": "test@example.com", "pw": "password"}
@@ -102,20 +143,28 @@ def test_password_form_validation(app, forms):
         form.csrf_token.data = generate_csrf()
 
         # Test valid data
-        assert form.validate()  # Should pass validation with valid data
+        assert form.validate()
 
         # Test missing email
         form.email.data = ""
-        assert not form.validate()  # Should fail validation without email
+        assert not form.validate()
 
         # Test missing password
         form.email.data = "test@example.com"
         form.pw.data = ""
-        assert not form.validate()  # Should fail validation without password
+        assert not form.validate()
 
 
 # Test for UserForm
 def test_user_form_validation(app, forms):
+    """
+    Test the validation of the user form.
+
+    Args:
+        app: Flask application instance.
+        forms: Fixture providing access to form classes.
+
+    """
     UserForm = forms["UserForm"]
     with app.test_request_context(
         "/register_user",
@@ -133,28 +182,28 @@ def test_user_form_validation(app, forms):
         form.csrf_token.data = generate_csrf()
 
         # Test valid data
-        assert form.validate()  # Should pass validation with valid data
+        assert form.validate()
 
         # Test missing name
         form.name.data = ""
-        assert not form.validate()  # Should fail validation without name
+        assert not form.validate()
 
         # Test missing username
         form.name.data = "Test User"
         form.username.data = ""
-        assert not form.validate()  # Should fail validation without username
+        assert not form.validate()
 
         # Test missing email
         form.username.data = "test_user"
         form.email.data = ""
-        assert not form.validate()  # Should fail validation without email
+        assert not form.validate()
 
         # Test missing password
         form.email.data = "test@example.com"
         form.password.data = ""
-        assert not form.validate()  # Should fail validation without password
+        assert not form.validate()
 
         # Test passwords mismatch
         form.password.data = "password"
         form.password2.data = "different_password"
-        assert not form.validate()  # Should fail validation with mismatched passwords
+        assert not form.validate()

@@ -5,6 +5,7 @@ from flask_login import LoginManager
 from sqlalchemy import MetaData
 from flask_ckeditor import CKEditor
 
+# SQLAlchemy metadata naming convention
 convention = {
     "ix": "ix_%(column_0_label)s",
     "uq": "uq_%(table_name)s_%(column_0_name)s",
@@ -13,10 +14,12 @@ convention = {
     "pk": "pk_%(table_name)s",
 }
 
+# Metadata with custom naming convention
 metadata = MetaData(naming_convention=convention)
 
-db = SQLAlchemy(metadata=metadata)
-migrate = Migrate(render_as_batch=True)
-bcrypt = Bcrypt()
-login_manager = LoginManager()
-ckEditor = CKEditor()
+# Initialize Flask extensions
+db = SQLAlchemy(metadata=metadata)  # Database ORM
+migrate = Migrate(render_as_batch=True)  # Database migrations
+bcrypt = Bcrypt()  # Password hashing
+login_manager = LoginManager()  # User session management
+ckEditor = CKEditor()  # Rich text editor

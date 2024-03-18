@@ -1,4 +1,12 @@
 def test_user_creation(db, models):
+    """
+    Test the creation of a user.
+
+    Args:
+        db: Database fixture.
+        models: Fixture providing access to model classes.
+
+    """
     Users = models["Users"]
     # Create a user
     user = Users(username="test_user", name="Test User", email="test@example.com")
@@ -15,6 +23,13 @@ def test_user_creation(db, models):
 
 
 def test_password_hashing(models):
+    """
+    Test the password hashing functionality.
+
+    Args:
+        models: Fixture providing access to model classes.
+
+    """
     Users = models["Users"]
     # Create a user with a password
     user = Users(username="test_user", name="Test User", email="test@example.com")
@@ -29,6 +44,14 @@ def test_password_hashing(models):
 
 
 def test_post_creation(db, models):
+    """
+    Test the creation of a post.
+
+    Args:
+        db: Database fixture.
+        models: Fixture providing access to model classes.
+
+    """
     Users = models["Users"]
     Posts = models["Posts"]
     # Create a user
