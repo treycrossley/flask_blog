@@ -16,7 +16,10 @@ Attributes:
       configuration classes for easy access and configuration loading.
 
 """
+from dataclasses import dataclass
 
+
+@dataclass
 class Config:
     """Base configuration class."""
 
@@ -26,12 +29,14 @@ class Config:
     UPLOAD_FOLDER = "app/static/images"
 
 
+@dataclass
 class DevConfig(Config):
     """Development configuration class."""
 
     DEBUG = True
 
 
+@dataclass
 class TestConfig(Config):
     """Test configuration class."""
 
@@ -40,4 +45,4 @@ class TestConfig(Config):
     WTF_CSRF_ENABLED = True
 
 
-config_by_name = dict(dev=DevConfig, test=TestConfig)
+config_by_name = {"dev": DevConfig, "test": TestConfig}

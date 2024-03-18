@@ -23,7 +23,6 @@ Functions:
     - load_user: Load a user by its ID.
 """
 
-import pdb
 import uuid
 import os
 from flask import (

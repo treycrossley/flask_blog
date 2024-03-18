@@ -1,2 +1,4 @@
 [MASTER]
-init-hook='import sys; sys.path.append("/Users/admin/Documents/code/smoothstack/evaluation-assignment/")'
+disable=invalid-name
+init-hook="import sys; sys.path.append('/Users/admin/Documents/code/smoothstack/evaluation-assignment/')"
+
