@@ -95,11 +95,9 @@ def search():
     if form.validate_on_submit():
         searched = form.searched.data
         search_regex = "%" + searched + "%"
-        pdb.set_trace()
         posts = posts.filter(
             or_(Posts.content.like(search_regex), Posts.title.like(search_regex))
         )
-        pdb.set_trace()
         posts = posts.order_by(Posts.title).all()
     return render_template("search.html", form=form, searched=searched, posts=posts)
 
