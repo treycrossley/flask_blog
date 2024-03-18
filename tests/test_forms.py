@@ -1,4 +1,15 @@
-import pytest
+"""
+Test suite for the forms module in the Flask application.
+
+This module contains unit tests for the forms defined in the Flask application.
+It ensures that the forms function correctly by testing various aspects such as
+data validation, form rendering, and submission handling.
+
+Attributes:
+    author (str): The author of the test suite.
+    email (str): Email address of the author.
+"""
+
 from flask_wtf.csrf import generate_csrf
 from app.forms import LoginForm, PostForm, SearchForm, NamerForm, PasswordForm, UserForm
 

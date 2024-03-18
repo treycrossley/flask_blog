@@ -1,7 +1,16 @@
+"""
+Test suite for the authentication functionality in the Flask application.
+
+This module contains unit tests for the authentication-related functionalities
+such as user registration, login, logout, password reset, and authentication
+middleware. It ensures that the authentication mechanisms work correctly and
+securely.
+
+"""
+
+from flask_login import current_user, login_user
 from app.extensions import bcrypt
 from app.models import Users
-import pdb
-from flask_login import current_user, login_required, login_user
 
 # Test login route
 def test_login_route(client):
@@ -28,7 +37,8 @@ def test_login_form_rendered(client):
 
     Asserts:
         - Whether the status code is 200, indicating success.
-        - Whether the response data contains expected form elements like username and password fields.
+        - Whether the response data contains expected form elements
+          like username and password fields.
     """
     response = client.get("/auth/login")
     assert response.status_code == 200
@@ -106,7 +116,7 @@ def test_login_with_valid_credentials(client, app, session):
         )
 
         # Check if login succeeds and user is authenticated
-        assert True  # is current_user.is_authenticated
+        assert b"Invalid username or password" not in response.data
 
 
 # Test logout route (Commented out due to errors)

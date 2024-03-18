@@ -1,5 +1,5 @@
 [MASTER]
-disable=invalid-name
-ignore=tests
-init-hook="import sys; sys.path.append('/Users/admin/Documents/code/smoothstack/evaluation-assignment/')"
+disable=invalid-name, redefined-outer-name
+init-hook="import sys; sys.path.append('/Users/admin/Documents/code/smoothstack/evaluation-assignment/'); sys.path.append('/Users/admin/Documents/code/smoothstack/evaluation-assignment/app'); sys.path.append('/Users/admin/Documents/code/smoothstack/evaluation-assignment/tests'); sys.path.append('/Users/admin/Documents/code/smoothstack/evaluation-assignment/app/extensions'); sys.path.append('/Users/admin/Documents/code/smoothstack/evaluation-assignment/app/models'); sys.path.append('/Users/admin/Documents/code/smoothstack/evaluation-assignment/app/forms')"
+
 
