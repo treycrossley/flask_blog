@@ -53,6 +53,17 @@ class Users(db.Model, UserMixin):
         """Representation of the user object."""
         return f"<User {self.username}>"
 
+    def update_profile(self, **kwargs):
+        """Update user's profile information."""
+        for key, value in kwargs.items():
+            setattr(self, key, value)
+        db.session.commit()
+
+    def delete_account(self):
+        """Delete user's account."""
+        db.session.delete(self)
+        db.session.commit()
+
 
 class Posts(db.Model):
     """Model for representing posts in the database."""
@@ -63,3 +74,23 @@ class Posts(db.Model):
     date_posted = db.Column(db.DateTime, default=datetime.now(timezone.utc))
     slug = db.Column(db.String(255))
     poster_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+
+    def get_formatted_date(self):
+        """Get formatted date string of the post's creation."""
+        return self.date_posted.strftime("%B %d, %Y")
+
+    def __repr__(self):
+        """Representation of the post object."""
+        return f"<Post {self.title}>"
+
+    def update_title(self, new_title):
+        """Update the title of the post."""
+        self.title = new_title
+
+    def update_content(self, new_content):
+        """Update the content of the post."""
+        self.content = new_content
+
+    def get_date_posted_formatted(self):
+        """Get the formatted date the post was posted."""
+        return self.date_posted.strftime("%Y-%m-%d %H:%M:%S")

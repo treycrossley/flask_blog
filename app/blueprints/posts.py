@@ -20,9 +20,9 @@ Attributes:
 from flask import Blueprint, render_template, redirect, url_for, flash
 from flask_login import current_user, login_required
 from sqlalchemy import exc
-from app.models import Posts
-from app.forms import PostForm
-from app.extensions import db
+from ..models import Posts
+from ..forms import PostForm
+from ..extensions import db
 
 posts_bp = Blueprint(
     "posts", __name__, url_prefix="/posts", template_folder="../../templates"

@@ -18,10 +18,9 @@ Imports:
     - db, migrate, bcrypt, login_manager, ckEditor: Extensions used in the application.
 """
 
-from os import environ
 from flask import Flask
 from config import config_by_name
-from app.blueprints import auth_bp, posts_bp, general_bp, users_bp
+from .blueprints import auth_bp, posts_bp, general_bp, users_bp
 from .extensions import db, migrate, bcrypt, login_manager, ckEditor
 
 

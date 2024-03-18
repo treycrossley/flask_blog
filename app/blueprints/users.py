@@ -37,9 +37,9 @@ from flask import (
 from flask_login import current_user, login_required, login_user
 from werkzeug.utils import secure_filename
 from sqlalchemy import exc
-from app.models import Users
-from app.forms import UserForm
-from app.extensions import db, bcrypt
+from ..models import Users
+from ..forms import UserForm
+from ..extensions import db, bcrypt
 
 
 users_bp = Blueprint(

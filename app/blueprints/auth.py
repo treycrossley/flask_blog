@@ -10,9 +10,9 @@ Attributes:
 
 from flask import Blueprint, render_template, redirect, flash, url_for
 from flask_login import current_user, login_required, login_user, logout_user
-from app.models import Users
-from app.forms import LoginForm
-from app.extensions import bcrypt
+from ..models import Users
+from ..forms import LoginForm
+from ..extensions import bcrypt
 
 
 # Create a Blueprint for authentication-related routes
@@ -44,10 +44,8 @@ def login():
                 # Redirect to the appropriate page based on user role
                 if current_user.is_admin:
                     return redirect(url_for("general.admin"))
-                else:
-                    return redirect(url_for("general.home"))
-            else:
-                flash("Wrong Password - Try again!")
+                return redirect(url_for("general.home"))
+            flash("Wrong Password - Try again!")
         else:
             flash("User does not exist")
 

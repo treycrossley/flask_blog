@@ -9,9 +9,9 @@ Attributes:
 
 from flask import Blueprint, render_template, redirect, flash, url_for
 from flask_login import login_required, current_user
-from app.models import Users, Posts
-from app.forms import SearchForm
-from app.extensions import login_manager
+from ..models import Users, Posts
+from ..forms import SearchForm
+from ..extensions import login_manager
 
 general_bp = Blueprint(
     "general", __name__, url_prefix="/", template_folder="../../templates"
@@ -63,9 +63,8 @@ def admin():
     our_users = Users.query.order_by(Users.date_added.desc())
     if current_user.is_admin:
         return render_template("admin.html", our_users=our_users)
-    else:
-        flash("You do not have admin privileges")
-        return redirect(url_for("general.dashboard"))
+    flash("You do not have admin privileges")
+    return redirect(url_for("general.dashboard"))
 
 
 @general_bp.app_context_processor
@@ -77,7 +76,8 @@ def base():
         dict: A dictionary containing the search form.
     """
     form = SearchForm()
-    return dict(form=form)
+
+    return {"form": form}
 
 
 @general_bp.route("/search", methods=["POST"])
@@ -97,7 +97,7 @@ def search():
             Posts.content.like(search_regex), Posts.title.like(search_regex)
         )
         posts = posts.order_by(Posts.title).all()
-        return render_template("search.html", form=form, searched=searched, posts=posts)
+    return render_template("search.html", form=form, searched=searched, posts=posts)
 
 
 @general_bp.route("/dashboard", methods=["GET", "POST"])
