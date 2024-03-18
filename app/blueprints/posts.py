@@ -100,7 +100,7 @@ def edit_post(post_id):
             flash("Post has been updated")
         except exc.SQLAlchemyError:
             flash("DB could not update post. try again")
-        return redirect(url_for("posts.post", id=post_to_edit.id))
+        return redirect(url_for("posts.post", post_id=post_to_edit.id))
 
     if current_user.id == post_to_edit.poster_id or current_user.is_admin:
         form.title.data = post_to_edit.title
@@ -136,7 +136,7 @@ def delete_post(post_id):
     else:
         flash("You can't delete this post")
     post_list = Posts.query.order_by(Posts.date_posted.desc())
-    return redirect(url_for("posts/posts.html", posts=post_list))
+    return redirect(url_for("posts.posts", posts=post_list))
 
 
 @posts_bp.route("/add", methods=["GET", "POST"])
@@ -169,5 +169,5 @@ def add_post():
         except exc.SQLAlchemyError:
             flash("Something went wrong!")
             return render_template("posts/add_post.html", form=form)
-        return redirect(url_for("posts.post", id=post_to_add.id))
+        return redirect(url_for("posts.post", post_id=post_to_add.id))
     return render_template("posts/add_post.html", form=form)

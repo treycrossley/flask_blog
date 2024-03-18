@@ -23,6 +23,7 @@ Functions:
     - load_user: Load a user by its ID.
 """
 
+import pdb
 import uuid
 import os
 from flask import (
@@ -220,7 +221,7 @@ def add_user():
                 db.session.add(user_to_add)
                 db.session.commit()
                 flash("User added!!")
-                if current_user is None:
+                if not current_user.is_authenticated:
                     login_user(user_to_add)
             except exc.SQLAlchemyError:
                 flash("Something went wrong")

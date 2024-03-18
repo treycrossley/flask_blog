@@ -8,7 +8,7 @@
 {% for post in posts %}
 
     <div class="shadow p-3 mb-5 bg-body-tertiary rounded">
-        <h2>{{post.id}}</h2> 
+        <h2>{{post.title}}</h2> 
 
         Posted by: {{post.poster.name}} </br>
         Posted on: {{post.date_posted.strftime("%a, %d %b, %Y")}} </br> </br>
