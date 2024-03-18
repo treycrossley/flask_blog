@@ -1,8 +1,6 @@
 import pytest
 from app import create_app
-from app.extensions import db, bcrypt  # Rename the imported db object
-from app.models import Users, Posts
-from app.forms import LoginForm, PasswordForm, NamerForm, PostForm, SearchForm, UserForm
+from app.extensions import db  # Rename the imported db object
 
 
 # Fixture to initialize the Flask application

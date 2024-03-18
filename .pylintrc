@@ -1,4 +1,5 @@
 [MASTER]
 disable=invalid-name
+ignore=tests
 init-hook="import sys; sys.path.append('/Users/admin/Documents/code/smoothstack/evaluation-assignment/')"
 
