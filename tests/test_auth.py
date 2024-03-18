@@ -1,3 +1,8 @@
+from app.extensions import bcrypt
+from app.models import Users
+import pdb
+from flask_login import current_user, login_required, login_user
+
 # Test login route
 def test_login_route(client):
     """
@@ -56,17 +61,45 @@ def test_login_form_rendered(client):
 
 
 # Test logout route (Commented out due to errors)
-# def test_logout_route(client):
-#     """
-#     Test whether the logout route redirects and logs out the user.
+def test_logout(client, app, session):
+    """
+    Test whether the logout route redirects and logs out the user.
 
-#     Args:
-#         client: Flask test client.
+    Args:
+        client: Flask test client.
 
-#     Asserts:
-#         - Whether the status code is 302, indicating a redirect after logout.
-#         - Whether the user is logged out (session does not contain user ID).
-#     """
-#     response = client.get('/auth/logout')
-#     assert response.status_code == 302
-#     assert session.get('_user_id') is None
+    Asserts:
+        - Whether the status code is 302, indicating a redirect after logout.
+        - Whether the user is logged out (session does not contain user ID).
+    """
+
+    # Manually create a request context and log in the user
+    with app.test_request_context():
+        test = "test"
+        testEmail = test + "@" + test + ".com"
+        hashed_password = bcrypt.generate_password_hash(test).decode("utf-8")
+
+        user = Users(
+            username=test,
+            name=test,
+            email=testEmail,
+            favorite_pizza_place=test,
+            password_hash=hashed_password,
+        )
+        session.add(user)
+        session.commit()
+        login_user(user)
+
+        # Access the logout route
+        response = client.get("/auth/logout", follow_redirects=True)
+
+        # Check if the user is redirected to the login page
+        assert (
+            response.status_code == 200
+        )  # Assuming you are redirected to the login page
+
+        # Check if the flash message indicating successful logout is present
+        assert b"You have been logged out!" in response.data
+
+        # check that user is logged out
+        assert current_user.is_authenticated is False

@@ -1,4 +1,7 @@
-def test_user_creation(db, models):
+from app.models import Users, Posts
+
+
+def test_user_creation(app, session):
     """
     Test the creation of a user.
 
@@ -7,11 +10,10 @@ def test_user_creation(db, models):
         models: Fixture providing access to model classes.
 
     """
-    Users = models["Users"]
     # Create a user
     user = Users(username="test_user", name="Test User", email="test@example.com")
-    db.session.add(user)
-    db.session.commit()
+    session.add(user)
+    session.commit()
 
     # Query the user from the database
     queried_user = Users.query.filter_by(username="test_user").first()
@@ -22,7 +24,7 @@ def test_user_creation(db, models):
     assert queried_user.email == "test@example.com"
 
 
-def test_password_hashing(models):
+def test_password_hashing(app):
     """
     Test the password hashing functionality.
 
@@ -30,7 +32,6 @@ def test_password_hashing(models):
         models: Fixture providing access to model classes.
 
     """
-    Users = models["Users"]
     # Create a user with a password
     user = Users(username="test_user", name="Test User", email="test@example.com")
     user.password = "password123"  # This will trigger the setter method
@@ -43,7 +44,7 @@ def test_password_hashing(models):
     assert user.verify_password("wrong_password") is False
 
 
-def test_post_creation(db, models):
+def test_post_creation(app, session):
     """
     Test the creation of a post.
 
@@ -52,17 +53,15 @@ def test_post_creation(db, models):
         models: Fixture providing access to model classes.
 
     """
-    Users = models["Users"]
-    Posts = models["Posts"]
     # Create a user
     user = Users(username="test_user", name="Test User", email="test@example.com")
-    db.session.add(user)
-    db.session.commit()
+    session.add(user)
+    session.commit()
 
     # Create a post by the user
     post = Posts(title="Test Post", content="This is a test post.", poster=user)
-    db.session.add(post)
-    db.session.commit()
+    session.add(post)
+    session.commit()
 
     # Query the post from the database
     queried_post = Posts.query.filter_by(title="Test Post").first()

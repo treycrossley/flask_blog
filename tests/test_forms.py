@@ -3,7 +3,7 @@ from flask_wtf.csrf import generate_csrf
 from app.forms import LoginForm, PostForm, SearchForm, NamerForm, PasswordForm, UserForm
 
 
-def test_login_form_validation(app, forms):
+def test_login_form_validation(app):
     """
     Test the validation of the login form.
 
@@ -12,7 +12,6 @@ def test_login_form_validation(app, forms):
         forms: Fixture providing access to form classes.
 
     """
-    LoginForm = forms["LoginForm"]
     with app.test_request_context(
         "/auth/login",
         method="POST",
@@ -36,7 +35,7 @@ def test_login_form_validation(app, forms):
 
 
 # Test for PostForm
-def test_post_form_validation(app, forms):
+def test_post_form_validation(app):
     """
     Test the validation of the post form.
 
@@ -45,7 +44,6 @@ def test_post_form_validation(app, forms):
         forms: Fixture providing access to form classes.
 
     """
-    PostForm = forms["PostForm"]
     with app.test_request_context(
         "/submit_post",
         method="POST",
@@ -78,7 +76,7 @@ def test_post_form_validation(app, forms):
 
 
 # Test for SearchForm
-def test_search_form_validation(app, forms):
+def test_search_form_validation(app):
     """
     Test the validation of the search form.
 
@@ -87,7 +85,6 @@ def test_search_form_validation(app, forms):
         forms: Fixture providing access to form classes.
 
     """
-    SearchForm = forms["SearchForm"]
     with app.test_request_context(
         "/search", method="POST", data={"searched": "keyword"}
     ):
@@ -103,7 +100,7 @@ def test_search_form_validation(app, forms):
 
 
 # Test for NamerForm
-def test_namer_form_validation(app, forms):
+def test_namer_form_validation(app):
     """
     Test the validation of the namer form.
 
@@ -112,7 +109,6 @@ def test_namer_form_validation(app, forms):
         forms: Fixture providing access to form classes.
 
     """
-    NamerForm = forms["NamerForm"]
     with app.test_request_context("/get_name", method="POST", data={"name": "John"}):
         form = NamerForm()
         form.csrf_token.data = generate_csrf()
@@ -126,7 +122,7 @@ def test_namer_form_validation(app, forms):
 
 
 # Test for PasswordForm
-def test_password_form_validation(app, forms):
+def test_password_form_validation(app):
     """
     Test the validation of the password form.
 
@@ -135,7 +131,6 @@ def test_password_form_validation(app, forms):
         forms: Fixture providing access to form classes.
 
     """
-    PasswordForm = forms["PasswordForm"]
     with app.test_request_context(
         "/register", method="POST", data={"email": "test@example.com", "pw": "password"}
     ):
@@ -156,7 +151,7 @@ def test_password_form_validation(app, forms):
 
 
 # Test for UserForm
-def test_user_form_validation(app, forms):
+def test_user_form_validation(app):
     """
     Test the validation of the user form.
 
@@ -165,7 +160,6 @@ def test_user_form_validation(app, forms):
         forms: Fixture providing access to form classes.
 
     """
-    UserForm = forms["UserForm"]
     with app.test_request_context(
         "/register_user",
         method="POST",
