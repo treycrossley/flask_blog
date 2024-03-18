@@ -1,6 +1,3 @@
-from datetime import datetime, timezone
-
-
 
 def test_user_creation(db, models):
     Users = models['Users']

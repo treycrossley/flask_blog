@@ -7,7 +7,7 @@ from flask_login import UserMixin
 
 
 # Create Flask instance
-app = create_app()
+app = create_app('dev')
 
 # Invalid URL page
 @app.errorhandler(404)
