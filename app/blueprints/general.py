@@ -13,7 +13,6 @@ from sqlalchemy import or_
 from ..models import Users, Posts
 from ..forms import SearchForm
 from ..extensions import login_manager
-import pdb
 
 general_bp = Blueprint(
     "general", __name__, url_prefix="/", template_folder="../../templates"

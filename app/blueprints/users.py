@@ -34,7 +34,7 @@ from flask import (
     redirect,
     url_for,
 )
-from flask_login import current_user, login_required, login_user
+from flask_login import current_user, login_required, login_user, logout_user
 from werkzeug.utils import secure_filename
 from sqlalchemy import exc
 from ..models import Users
@@ -126,18 +126,20 @@ def delete(user_id):
         user_to_delete = Users.query.get_or_404(user_id)
         name = None
         form = UserForm()
+        our_users = Users.query.order_by(Users.date_added.desc())
         try:
             db.session.delete(user_to_delete)
             db.session.commit()
             flash("USER DELETED")
             our_users = Users.query.order_by(Users.date_added.desc())
-            return render_template(
-                "add_user.html", form=form, name=name, our_users=our_users
-            )
+            if current_user.is_admin:
+                return redirect(url_for("general.admin"))
+            logout_user()
+            return redirect(url_for("auth.login"))
         except exc.SQLAlchemyError:
             flash("OOPSIES. SOMETHING WENT WRONG")
-            return render_template(
-                "users/add_user.html", form=form, name=name, our_users=our_users
+            return redirect(
+                url_for("users.add_user", form=form, name=name, our_users=our_users)
             )
     else:
         flash("You don't have permission to delete this user")
