@@ -67,7 +67,7 @@ def delete(id):
             db.session.delete(user_to_delete)
             db.session.commit()
             flash("USER DELETED")
-            our_users = Users.query.order_by(Users.date_added)
+            our_users = Users.query.order_by(Users.date_added.desc())
             return render_template('add_user.html', form=form, name=name, our_users=our_users)
         except BaseException:
             flash("OOPSIES. SOMETHING WENT WRONG")
@@ -129,6 +129,6 @@ def add_user():
         form.favorite_pizza_place.data=''
         form.password.data = ''
         form.username.data=''
-    our_users = Users.query.order_by(Users.date_added)
+    our_users = Users.query.order_by(Users.date_added.desc())
     return render_template('users/add_user.html', form=form, name=name, our_users=our_users)
 

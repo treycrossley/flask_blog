@@ -9,13 +9,13 @@ posts_bp = Blueprint("posts", __name__, url_prefix='/posts', template_folder="..
 
 @posts_bp.route('/')
 def posts():
-    posts = Posts.query.order_by(Posts.date_posted)
+    posts = Posts.query.order_by(Posts.date_posted.desc())
     return render_template("posts/posts.html", posts=posts)
 
 @posts_bp.route('/myposts')
 @login_required
 def my_posts():
-    posts = Posts.query.filter_by(poster_id=current_user.id).all()
+    posts= Posts.query.filter_by(poster_id=current_user.id).order_by(Posts.date_posted.desc()).all()
     return render_template("posts/posts.html", posts=posts)
 
 @posts_bp.route('/<int:id>')
@@ -47,8 +47,8 @@ def edit_post(id):
         form.content.data=post.content
         return render_template('posts/edit_post.html',form=form, post_id = id)
     flash("You are not authorized to edit this post")
-    posts = Posts.query.order_by(Posts.date_posted)
-    return render_template("posts/posts.html", posts=posts)
+    posts = Posts.query.order_by(Posts.date_posted.desc())
+    return redirect(url_for('posts/posts.html', posts=posts))
 
 @posts_bp.route('/delete/<int:id>')
 @login_required
@@ -64,9 +64,8 @@ def delete_post(id):
         
     else:
         flash("You can't delete this post")
-    posts = Posts.query.order_by(Posts.date_posted)
-    return render_template("posts/posts.html", posts=posts)
-    
+    posts = Posts.query.order_by(Posts.date_posted.desc())
+    return redirect(url_for('posts/posts.html', posts=posts))
 
 @posts_bp.route('/add', methods=['GET', 'POST'])
 @login_required
@@ -81,9 +80,13 @@ def add_post():
         try:
             db.session.add(post)
             db.session.commit()
+            
             flash("Post succesfully submitted!")
         except Exception:
             flash("Something went wrong!")
+            return render_template('posts/add_post.html', form=form)
+        return redirect(url_for('posts.post', id=post.id))
     return render_template('posts/add_post.html', form=form)
+    
 
 

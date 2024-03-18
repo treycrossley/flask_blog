@@ -29,7 +29,7 @@ def home():
 @general_bp.route('/admin')
 @login_required
 def admin():
-    our_users = Users.query.order_by(Users.date_added)
+    our_users = Users.query.order_by(Users.date_added.desc())
     """Directs to admin page"""
     if current_user.is_admin:
         return render_template("admin.html", our_users=our_users)
