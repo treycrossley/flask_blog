@@ -26,4 +26,8 @@
 
 {%endfor%}
 
+{% if not posts %}
+    <p>No Posts. Either make some or come back later!</p>
+{% endif %}
+
 {% endblock %}

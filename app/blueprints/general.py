@@ -9,9 +9,11 @@ Attributes:
 
 from flask import Blueprint, render_template, redirect, flash, url_for
 from flask_login import login_required, current_user
+from sqlalchemy import or_
 from ..models import Users, Posts
 from ..forms import SearchForm
 from ..extensions import login_manager
+import pdb
 
 general_bp = Blueprint(
     "general", __name__, url_prefix="/", template_folder="../../templates"
@@ -89,13 +91,15 @@ def search():
         Response: The search results page template.
     """
     form = SearchForm()
-    posts = Posts.query
+    posts = Posts.query.order_by(Posts.date_posted.desc())
     if form.validate_on_submit():
         searched = form.searched.data
         search_regex = "%" + searched + "%"
+        pdb.set_trace()
         posts = posts.filter(
-            Posts.content.like(search_regex), Posts.title.like(search_regex)
+            or_(Posts.content.like(search_regex), Posts.title.like(search_regex))
         )
+        pdb.set_trace()
         posts = posts.order_by(Posts.title).all()
     return render_template("search.html", form=form, searched=searched, posts=posts)
 
