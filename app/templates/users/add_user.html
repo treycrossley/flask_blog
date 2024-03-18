@@ -4,8 +4,10 @@
 {% block content %}
   
 
-    {% if name %}
-    <h1>User added!</h1>
+    {% if name and not current_user.is_admin%}
+    <h1>Welcome to our blog {{name}} !!</h1>
+    {% elif name and current_user.is_admin%}
+    <h1>User {{name}} added!!</h1>
 
     {% else %}
     <h1> What's your name?</h1>

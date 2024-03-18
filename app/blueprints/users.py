@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, flash, current_app, redirect, url_for
-from flask_login import current_user, login_required
+from flask_login import current_user, login_required, login_user
 from app.models import Users
 from app.forms import UserForm
 from app.extensions import db, bcrypt
@@ -121,6 +121,8 @@ def add_user():
                 db.session.add(user)
                 db.session.commit()
                 flash("User added!!")
+                if current_user is None:
+                    login_user(user)
             except Exception:
                 flash("Something went wrong")
         name = form.name.data
