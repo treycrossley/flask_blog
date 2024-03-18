@@ -1,3 +1,12 @@
+"""
+Blueprint for general routes and views.
+
+This module defines routes and views for general pages such as home, about, and admin pages.
+
+Attributes:
+    general_bp (Blueprint): Blueprint object for general routes.
+"""
+
 from flask import Blueprint, render_template, redirect, flash, url_for
 from flask_login import login_required, current_user
 from app.models import Users, Posts

@@ -1,3 +1,23 @@
+"""
+Module for creating the Flask application instance and registering blueprints and extensions.
+
+This module contains the necessary code to create the Flask application instance, configure it
+based on the specified configuration, and register blueprints and extensions.
+
+Functions:
+    create_app(config_name): Function to create the Flask application instance based on the
+        specified configuration name.
+
+Constants:
+    config_by_name: Dictionary containing configurations for different environments.
+
+Imports:
+    - Flask: Class for creating the Flask application.
+    - config_by_name: Dictionary containing configurations for different environments.
+    - auth_bp, posts_bp, general_bp, users_bp: Blueprints for different parts of the application.
+    - db, migrate, bcrypt, login_manager, ckEditor: Extensions used in the application.
+"""
+
 from os import environ
 from flask import Flask
 from config import config_by_name

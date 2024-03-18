@@ -1,5 +1,21 @@
-from os import path
+"""
+Configuration Classes
 
+Defines configuration classes for different environments: base configuration,
+development configuration, and test configuration.
+
+Attributes:
+    - Config: Base configuration class with common settings such as secret key,
+      database URI, track modifications, and upload folder.
+    - DevConfig: Development configuration class inheriting from Config,
+      enabling debug mode.
+    - TestConfig: Test configuration class inheriting from Config, configuring
+      the database URI for testing and enabling testing mode with CSRF protection.
+
+    - config_by_name: Dictionary mapping environment names to their respective
+      configuration classes for easy access and configuration loading.
+
+"""
 
 class Config:
     """Base configuration class."""

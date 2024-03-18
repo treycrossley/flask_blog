@@ -1,8 +1,35 @@
+"""
+Module for defining Flask forms used in the application.
+
+This module defines various FlaskForm classes for different purposes, such as user login,
+post creation/editing, searching, user information gathering, and user registration.
+
+Classes:
+    - LoginForm: Form for user login.
+    - PostForm: Form for creating or editing a post.
+    - SearchForm: Form for searching.
+    - NamerForm: Form for asking user's name.
+    - PasswordForm: Form for asking user's email and password.
+    - UserForm: Form for creating or editing a user.
+
+Packages:
+    - FlaskForm: Base class for forms in Flask-WTF.
+    - StringField: Field for string input.
+    - SubmitField: Field for submit button.
+    - PasswordField: Field for password input.
+    - CKEditorField: Field for CKEditor input.
+    - FileField: Field for file input.
+    - DataRequired: Validator to ensure data is provided.
+    - Email: Validator to ensure data is a valid email address.
+    - EqualTo: Validator to ensure data is equal to another field.
+
+"""
+
 from flask_wtf import FlaskForm
+from flask_wtf.file import FileField
 from wtforms import StringField, SubmitField, PasswordField
 from wtforms.validators import DataRequired, Email, EqualTo
 from flask_ckeditor import CKEditorField
-from flask_wtf.file import FileField
 
 
 class LoginForm(FlaskForm):

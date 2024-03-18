@@ -1,3 +1,17 @@
+"""
+This module includes the initialization of various Flask extensions required for the application.
+
+- Bcrypt: For password hashing.
+- SQLAlchemy: For database ORM.
+- Migrate: For database migrations.
+- LoginManager: For user session management.
+- MetaData: For defining the naming convention for SQLAlchemy.
+- CKEditor: For integrating a rich text editor.
+
+The SQLAlchemy MetaData is initialized with a custom naming convention
+for database constraints and indexes.
+"""
+
 from flask_bcrypt import Bcrypt
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate

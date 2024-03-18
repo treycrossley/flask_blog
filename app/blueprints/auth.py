@@ -1,3 +1,13 @@
+"""
+Module level docstring describing the authentication blueprint.
+
+This blueprint handles user authentication including login and logout routes.
+
+Attributes:
+    auth_bp (Blueprint): Blueprint object for authentication routes.
+
+"""
+
 from flask import Blueprint, render_template, redirect, flash, url_for
 from flask_login import current_user, login_required, login_user, logout_user
 from app.models import Users

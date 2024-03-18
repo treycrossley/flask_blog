@@ -35,7 +35,7 @@
     </br>
     {{form.submit(class="btn btn-secondary")}}
 
-    <a class='btn btn-outline-danger btn-small' href="{{url_for('posts.delete_post',id=post_id)}}">Delete post</a>
+    <a class='btn btn-outline-danger btn-small' href="{{url_for('posts.delete_post',post_id=post_id)}}">Delete post</a>
     </form>
       {{ ckeditor.load() }}
     {{ ckeditor.config(name='content') }}

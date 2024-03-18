@@ -1,3 +1,20 @@
+"""
+Module for defining database models for the application.
+
+This module contains the database models for representing users and posts in the application.
+
+Classes:
+    Users: Model for representing users in the database.
+    Posts: Model for representing posts in the database.
+
+Imports:
+    - datetime: Module for working with dates and times.
+    - timezone: Class representing a time zone.
+    - UserMixin: Class providing default implementations for User class methods.
+    - db: Database instance from SQLAlchemy.
+    - bcrypt: Instance of Bcrypt for hashing passwords.
+"""
+
 from datetime import datetime, timezone
 from flask_login import UserMixin
 from .extensions import db, bcrypt
