@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, redirect, request, flash, url_for
 from app.models import Users
 from app.forms import LoginForm
 from app.extensions import db, bcrypt
-from flask_login import login_required, login_user, logout_user
+from flask_login import current_user, login_required, login_user, logout_user
 
 auth_bp = Blueprint("auth", __name__, url_prefix='/auth', template_folder="../../templates")
 
@@ -17,7 +17,9 @@ def login():
                 if bcrypt.check_password_hash(user.password_hash, form.password.data):
                     login_user(user)
                     flash("Login sucessful!")
-                    return redirect(url_for('general.dashboard'))
+                    if current_user.is_admin:
+                        return redirect(url_for('general.admin'))
+                    return redirect(url_for('general.home'))
                 else: 
                     flash("Wrong Password - Try again!")
             else: 
